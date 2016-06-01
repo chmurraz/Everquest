@@ -87,6 +87,7 @@ public:
 	void setShielding(bool val);
 	bool getShielding();
 	System::String^ getPetName();
+	void setPetName();
 	System::String^ getLastLine();
 	void setLastLineRead(System::String^ val);
 	System::String^ getLastLineRead();
@@ -112,7 +113,6 @@ public:
 	bool CannotSeeTarget();
 	bool TargetOutOfRange();
 	void PetBackOff();
-	void GetPetName();
 	void TargetPet();
 
 

@@ -214,6 +214,8 @@ void Character::OnLogChange(Object ^, FileSystemEventArgs ^ e)
 
 void Character::LogFlags(System::String^ newLine)
 {
+	//	REMOVE THIS FUNCTION FROM CHARACTER.H/CPP IF IT IS SUCESSFULLY INCLUDED IN WATCHER THREAD CLASS
+
 	//	Update character member variables based on new line activity
 
 	//	Experience
@@ -302,7 +304,7 @@ void Character::NecroRoutine()
 		}
 		if (!petAlive)
 			SummonPet();
-		GetPetName();
+		setPetName();
 		FindValidTarget();
 
 		// Main combat loop
@@ -626,7 +628,7 @@ void Character::PetBackOff()
 	PressKeys(ip, "/pet back off\r", 3000);
 }
 
-void Character::GetPetName()
+void Character::setPetName()
 {
 	//	Target pet and say his name to guildchat
 	TargetPet();

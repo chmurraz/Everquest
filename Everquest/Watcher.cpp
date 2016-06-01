@@ -46,7 +46,9 @@ void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
 		if (character->getLastLineRead() == "")
 		{
 			character->setLastLineRead(currentLine);
-			character->LogFlags(currentLine);
+			WatcherThreadWithState^ wtws = gcnew WatcherThreadWithState(character, currentLine);
+			Thread^ logThread = gcnew Thread(gcnew ThreadStart(wtws, &WatcherThreadWithState::ThreadProc));
+			//character->LogFlags(currentLine);
 		}
 
 		//	Otherwise, the lastLineRead is nonempty.  Set a flag and only send lines encountered after that
@@ -55,7 +57,12 @@ void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
 			if (currentLine == character->getLastLineRead())
 				foundLastLineReadInLog = true;
 			if (foundLastLineReadInLog && (currentLine != character->getLastLineRead()))
-				character->LogFlags(currentLine);
+			{
+				WatcherThreadWithState^ wtws = gcnew WatcherThreadWithState(character, currentLine);
+				Thread^ logThread = gcnew Thread(gcnew ThreadStart(wtws, &WatcherThreadWithState::ThreadProc));
+				//character->LogFlags(currentLine);
+			}
+
 		}
 
 	};
@@ -73,4 +80,76 @@ void Watcher::ScanLog()
 void Watcher::setCharacter(Character ^ val)
 {
 	character = val;
+}
+
+WatcherThreadWithState::WatcherThreadWithState(Character^ val1, String^ val2)
+{
+	threadCharacter = val1;
+	threadLine = val2;
+}
+
+void WatcherThreadWithState::ThreadProc()
+{
+
+	Console::WriteLine("threading");
+	//	Update character member variables based on new line activity
+
+	//	Experience
+	if (threadLine->Contains("You gain experience"))
+		threadCharacter->setExp(true);
+
+	//	Buffs
+	if (threadLine->Contains("You do not sense any enchantments"))
+		threadCharacter->setShielding(false);
+	if (threadLine->Contains("Minor Shielding"))
+		threadCharacter->setShielding(true);
+	if (threadLine->Contains("You feel armored"))
+		threadCharacter->setShielding(true);
+	if (threadLine->Contains("Your shielding fades away"))
+		threadCharacter->setShielding(false);
+
+	//	Target
+	if (threadLine->Contains("looks kind of risky") ||
+		threadLine->Contains("looks like an even fight"))
+	{
+		threadCharacter->setValidTarget(true);
+	}
+	if (threadLine->Contains("no longer have a target") ||
+		threadLine->Contains("must first select a target for this spell") ||
+		threadLine->Contains("can't drain yourself") ||
+		(threadCharacter->getPetAlive() && threadLine->Contains(threadCharacter->getPetName())) ||
+		threadLine->Contains("target is out of range") ||
+		threadLine->Contains("cannot see your target") ||
+		threadLine->Contains("a skunk") ||
+		threadLine->Contains("This corpse will decay in"))
+		threadCharacter->setValidTarget(false);
+
+	//	Pet Alive or Dead or In Combat
+	if (threadLine->Contains("Changing position") ||
+		threadLine->Contains("Targeting your pet") ||
+		threadLine->Contains("cannot have more than one pet at a time"))
+		threadCharacter->setPetAlive(true);
+	if (threadLine->Contains("don't have a pet to command"))
+		threadCharacter->setPetAlive(false);
+	if (threadLine->Contains("tells you, 'Attacking") && threadLine->Contains("Master"))
+		threadCharacter->setPetInCombat(true);
+
+	//	Casting spells
+	if (threadLine->Contains("Your spell fizzles"))
+	{
+		threadCharacter->setFizzled(true);
+		threadCharacter->setCastingSpell(false);
+	}
+	if (threadLine->Contains("You begin casting") ||
+		threadLine->Contains("Yuse that command while casting") ||
+		threadLine->Contains("You haven't recovered yet") ||
+		threadLine->Contains("Your spell is interrupted"))
+	{
+		threadCharacter->setCastingSpell(true);
+		threadCharacter->setFizzled(false);
+	}
+
+	//	Combat
+	if (threadLine->Contains("YOU for") || threadLine->Contains("YOU, but misses"))
+		threadCharacter->setBeingHit(true);
 }

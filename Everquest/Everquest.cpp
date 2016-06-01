@@ -59,6 +59,7 @@ namespace SimulateKeyPress
 [STAThread]
 int main()
 {
+	Console::WriteLine("testing (in Everquest.cpp:main) 1 2 3");
 	Application::EnableVisualStyles();
 	Application::Run(gcnew SimulateKeyPress::Form1('\r'));
 }
