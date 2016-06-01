@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <msclr\marshal_windows.h>
+//#include <msclr\marshal_windows.h>
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 using namespace System;
