@@ -102,6 +102,7 @@ void Character::PetAssist()
 
 void Character::InspectBuffs()
 {
+	Console::WriteLine("Inspecting buffs");
 	PressF1();
 	PressKeys(ip,"/inspectbuffs\r",typeSpeed);
 	Sleep(3000);
@@ -162,6 +163,7 @@ bool Character::Died()
 
 void Character::FindValidTarget()
 {
+	Console::WriteLine("Finding a valid target");
 	validTarget = false;
 	std::string target;
 	do
@@ -287,6 +289,7 @@ void Character::NecroRoutine()
 
 	for (int i = 0; i < 100; i++)
 	{
+		Console::WriteLine("Current loop iteration is " + i);
 		MoveEQToFront();
 		experience = false;
 		beingHit = false;
@@ -313,11 +316,12 @@ void Character::NecroRoutine()
 			do
 			{
 				MoveEQToFront();
-				Consider();
+				//Consider();
 				MoveEQToFront();
+				PetAttack();
 				LifeSpike();
-				if (validTarget)
-					PetAttack();
+				if (!validTarget)
+					PetBackOff();
 			} while (!experience && validTarget && !beingHit);
 
 			if (beingHit)
@@ -434,6 +438,7 @@ void Character::LogOn()
 
 void Character::HideCorpses()
 {
+	Console::WriteLine("Hiding corpses");
 	this->Talk(true, "hiding corpses");
 	PressKeys(ip, "/hidecorpse all\r", 1000);
 }
@@ -530,11 +535,13 @@ bool Character::SpellFizzle()
 
 void Character::PetSit()
 {
+	Console::WriteLine("Telling pet to sit");
 	PressKeys(ip, "/pet sit\r",250);
 }
 
 void Character::Sit()
 {
+	Console::WriteLine("Sitting");
 	if (!beingHit)
 		PressKeys(ip, "/sit\r", 250);
 }
@@ -546,6 +553,7 @@ void Character::PetAttack()
 
 void Character::Shielding()
 {
+	Console::WriteLine("Casting shielding");
 	do
 	{
 		PressKeys(ip, "/cast 1\r", 500);
@@ -630,9 +638,16 @@ void Character::PetBackOff()
 
 void Character::setPetName()
 {
+	Console::WriteLine("Setting pet name");
 	//	Target pet and say his name to guildchat
 	TargetPet();
-	PressKeys(ip, "/hail\r", typeSpeed);
+	//PressKeys(ip, "/hail\r", typeSpeed);
+
+	PressKeys(ip, "/gu ", typeSpeed);
+	HoldShift();
+	PressKeys(ip, "5", typeSpeed);
+	ReleaseShift();
+	PressKeys(ip, "t\r", typeSpeed);
 
 	//	While the newLine doesn't contain "You say", loop
 	do
@@ -641,15 +656,22 @@ void Character::setPetName()
 	} while (!(petName->Contains("You say")));
 
 	//	Trim the last single quote character and everything up to and including the first one
-	int nameStart = petName->IndexOf("Hail, ");
+	//int nameStart = petName->IndexOf("Hail, ");
+	int nameStart = petName->IndexOf("guild, ");
 	int nameEnd = petName->LastIndexOf("'");
 	petName = petName->Remove(nameEnd, 1);
-	petName = petName->Substring(nameStart + 6);
+	petName = petName->Substring(nameStart + 8);
+	if (petName == "Target")
+	{
+		petAlive = false;
+		petName = "";
+	}
 	PressESC();
 }
 
 void Character::TargetPet()
 {
+	Console::WriteLine("Targeting Pet");
 	PressKeys(ip, "/pet target\r", 500);
 }
 

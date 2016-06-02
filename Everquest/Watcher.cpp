@@ -48,6 +48,7 @@ void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
 			character->setLastLineRead(currentLine);
 			WatcherThreadWithState^ wtws = gcnew WatcherThreadWithState(character, currentLine);
 			Thread^ logThread = gcnew Thread(gcnew ThreadStart(wtws, &WatcherThreadWithState::ThreadProc));
+			logThread->Start();
 			//character->LogFlags(currentLine);
 		}
 
@@ -60,9 +61,9 @@ void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
 			{
 				WatcherThreadWithState^ wtws = gcnew WatcherThreadWithState(character, currentLine);
 				Thread^ logThread = gcnew Thread(gcnew ThreadStart(wtws, &WatcherThreadWithState::ThreadProc));
+				logThread->Start();
 				//character->LogFlags(currentLine);
 			}
-
 		}
 
 	};
@@ -91,7 +92,6 @@ WatcherThreadWithState::WatcherThreadWithState(Character^ val1, String^ val2)
 void WatcherThreadWithState::ThreadProc()
 {
 
-	Console::WriteLine("threading");
 	//	Update character member variables based on new line activity
 
 	//	Experience
@@ -152,4 +152,5 @@ void WatcherThreadWithState::ThreadProc()
 	//	Combat
 	if (threadLine->Contains("YOU for") || threadLine->Contains("YOU, but misses"))
 		threadCharacter->setBeingHit(true);
+
 }
