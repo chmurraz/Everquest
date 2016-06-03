@@ -288,7 +288,7 @@ void Character::NecroRoutine()
 	EraseLog();
 	LogOn();
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 500; i++)
 	{
 		Console::WriteLine("Current loop iteration is " + i);
 		MoveEQToFront();
@@ -296,6 +296,7 @@ void Character::NecroRoutine()
 		beingHit = false;
 		petInCombat = false;
 		MoveEQToFront();
+
 		HideCorpses();
 		PressESC();
 		MoveEQToFront();
