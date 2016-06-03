@@ -109,6 +109,7 @@ public:
 	void PetSit();
 	void Sit();
 	void PetAttack();
+	void AssistPet();
 
 	bool CannotSeeTarget();
 	bool TargetOutOfRange();

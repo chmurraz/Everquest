@@ -330,6 +330,8 @@ void Character::NecroRoutine()
 					MoveEQToFront();
 					PetBackOff();
 				}
+				AssistPet();
+				VerifyTarget();
 			} while (!experience && validTarget && !beingHit);
 
 			if (beingHit)
@@ -558,6 +560,12 @@ void Character::PetAttack()
 {
 	Console::WriteLine("Pet attacking");
 	PressKeys(ip, "/pet attack\r", 0);
+}
+
+void Character::AssistPet()
+{
+	Console::WriteLine("Assisting pet");
+	PressKeys(ip, "/assist " + getPetName() + " \r", typeSpeed);
 }
 
 void Character::Shielding()
