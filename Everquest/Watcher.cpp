@@ -113,16 +113,53 @@ void WatcherThreadWithState::ThreadProc()
 		threadLine->Contains("looks like an even fight"))
 	{
 		threadCharacter->setValidTarget(true);
+		Console::WriteLine("Setting valid target to TRUE");
 	}
-	if (threadLine->Contains("no longer have a target") ||
-		threadLine->Contains("must first select a target for this spell") ||
-		threadLine->Contains("can't drain yourself") ||
-		(threadCharacter->getPetAlive() && threadLine->Contains(threadCharacter->getPetName())) ||
-		threadLine->Contains("target is out of range") ||
-		threadLine->Contains("cannot see your target") ||
-		threadLine->Contains("a skunk") ||
-		threadLine->Contains("This corpse will decay in"))
+
+	if (threadLine->Contains("must first select a target for this spell"))
+	{
 		threadCharacter->setValidTarget(false);
+		Console::WriteLine("Invalid target:  NO TARGET");
+	}
+
+	if (threadLine->Contains("no longer have a target"))
+	{
+		threadCharacter->setValidTarget(false);
+		Console::WriteLine("Invalid target:  NO TARGET... pressed ESC");
+	}
+
+	if (threadLine->Contains("can't drain yourself"))
+	{
+		threadCharacter->setValidTarget(false);
+		Console::WriteLine("Invalid target:  attempting to lifespike self");
+	}
+
+	if (threadLine->Contains("target is out of range"))
+	{
+		threadCharacter->setValidTarget(false);
+		Console::WriteLine("Invalid target:  out of range");
+	}
+
+	if (threadLine->Contains("cannot see your target"))
+	{
+		threadCharacter->setValidTarget(false);
+		Console::WriteLine("Invalid target:  can't see");
+	}
+
+	if (threadLine->Contains("a skunk"))
+	{
+		threadCharacter->setValidTarget(false);
+		Console::WriteLine("Invalid target:  skunk");
+	}
+
+	if (threadLine->Contains("this corpse will decay in"))
+	{
+		threadCharacter->setValidTarget(false);
+		Console::WriteLine("Invalid target:  corpse");
+	}
+
+
+		
 
 	//	Pet Alive or Dead or In Combat
 	if (threadLine->Contains("Changing position") ||

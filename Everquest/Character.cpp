@@ -169,6 +169,7 @@ void Character::FindValidTarget()
 	do
 	{
 		this->Talk(true, "finding a valid target");
+		MoveEQToFront();
 		PressTab();
 		VerifyTarget();
 		Sleep(1000);
@@ -294,10 +295,14 @@ void Character::NecroRoutine()
 		experience = false;
 		beingHit = false;
 		petInCombat = false;
+		MoveEQToFront();
 		HideCorpses();
 		PressESC();
+		MoveEQToFront();
 		TargetPet();
+		MoveEQToFront();
 		PetSit();
+		MoveEQToFront();
 		InspectBuffs();
 		if (!shielding)
 		{
@@ -321,7 +326,10 @@ void Character::NecroRoutine()
 				PetAttack();
 				LifeSpike();
 				if (!validTarget)
+				{
+					MoveEQToFront();
 					PetBackOff();
+				}
 			} while (!experience && validTarget && !beingHit);
 
 			if (beingHit)
@@ -548,6 +556,7 @@ void Character::Sit()
 
 void Character::PetAttack()
 {
+	Console::WriteLine("Pet attacking");
 	PressKeys(ip, "/pet attack\r", 0);
 }
 
@@ -562,11 +571,11 @@ void Character::Shielding()
 
 void Character::LifeSpike()
 {
-	this->Talk(true, "lifetapping");
+	Console::WriteLine("Casting Lifespike");
 	do
 	{
 		PressKeys(ip, "/cast 2\r", 500);
-	} while (fizzled && validTarget);
+	} while (fizzled);
 	if (!beingHit)
 		Sleep(2000);
 }
