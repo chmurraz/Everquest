@@ -6,11 +6,7 @@
 #pragma once
 
 #include "targetver.h"
-
 #include <stdio.h>
 #include <tchar.h>
+
 #pragma comment(lib, "user32.lib")
-
-
-
-// TODO: reference additional headers your program requires here
