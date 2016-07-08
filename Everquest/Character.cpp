@@ -288,84 +288,82 @@ void Character::NecroRoutine()
 	EraseLog();
 	LogOn();
 
-	for (int i = 0; i < 500; i++)
+	Console::WriteLine("Current loop iteration is ");
+	MoveEQToFront();
+	experience = false;
+	beingHit = false;
+	petInCombat = false;
+	MoveEQToFront();
+
+	HideCorpses();
+	PressESC();
+	MoveEQToFront();
+	TargetPet();
+	MoveEQToFront();
+	PetSit();
+	MoveEQToFront();
+	InspectBuffs();
+	if (!shielding)
 	{
-		Console::WriteLine("Current loop iteration is " + i);
-		MoveEQToFront();
-		experience = false;
-		beingHit = false;
-		petInCombat = false;
-		MoveEQToFront();
+		Shielding();
+		Sleep(4000);
+		Sit();
+	}
+	if (!petAlive)
+		SummonPet();
+	setPetName();
+	FindValidTarget();
 
-		HideCorpses();
-		PressESC();
-		MoveEQToFront();
-		TargetPet();
-		MoveEQToFront();
-		PetSit();
-		MoveEQToFront();
-		InspectBuffs();
-		if (!shielding)
-		{
-			Shielding();
-			Sleep(4000);
-			Sit();
-		}
-		if (!petAlive)
-			SummonPet();
-		setPetName();
-		FindValidTarget();
-
-		// Main combat loop
+	// Main combat loop
+	do
+	{
 		do
 		{
-			do
+			MoveEQToFront();
+			//Consider();
+			MoveEQToFront();
+			PetAttack();
+			LifeSpike();
+			if (!validTarget)
 			{
 				MoveEQToFront();
-				//Consider();
-				MoveEQToFront();
-				PetAttack();
-				LifeSpike();
-				if (!validTarget)
-				{
-					MoveEQToFront();
-					PetBackOff();
-				}
-				AssistPet();
-				VerifyTarget();
-			} while (!experience && validTarget && !beingHit);
-
-			if (beingHit)
-			{
-				// Press SHIFT + TAB to target nearest NPC
-				HoldShift();
-				PressTab();
-				ReleaseShift();
-				PetAttack();
-			}
-
-			if (experience)
-			{
-				PressESC();
 				PetBackOff();
-				beingHit = false;
-				petInCombat = false;
 			}
-		} while (beingHit);
+			AssistPet();
+			VerifyTarget();
+		} while (!experience && validTarget && !beingHit);
 
-		MoveEQToFront();
-		Sleep(1000);
-		Sit();
-		Sleep(3000);
-		PetSit();
-		Sleep(1000);
-		PressESC();
-		if (lowMana & !beingHit)
+		if (beingHit)
 		{
-			Sleep(35000);
+			// Press SHIFT + TAB to target nearest NPC
+			HoldShift();
+			PressTab();
+			ReleaseShift();
+			PetAttack();
 		}
 
+		if (experience)
+		{
+			PressESC();
+			PetBackOff();
+			beingHit = false;
+			petInCombat = false;
+		}
+	} while (beingHit);
+
+	MoveEQToFront();
+	Sleep(1000);
+	Sit();
+	Sleep(3000);
+	PetSit();
+	Sleep(1000);
+	PressESC();
+	if (lowMana & !beingHit)
+	{
+		Sleep(35000);
 	}
+
+	
 	routineStop = true;
 	Talk(true, "routine finished");
 }

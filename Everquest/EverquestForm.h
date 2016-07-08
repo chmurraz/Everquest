@@ -15,8 +15,8 @@ public ref class EverquestForm : public System::Windows::Forms::Form
 {
 private:
 	bool consoleShowing;
-	System::String^ charName;
-	System::String^ serverName;
+	static System::String^ charName;
+	static System::String^ serverName;
 
 	Button^ button1;
 	Button^ button2;
@@ -39,6 +39,8 @@ public:
 	void ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text);
 	void TextBoxBuilder(TextBox^ box, int locx, int locy, int tabIndx, System::String^ text);
 	void LabelBuilder(Label^ label, int locx, int locy, int tabIndx, System::String^ text);
+	static System::String^ getCharName();
+	static System::String^ getServerName();
 
 	static void Main();
 };

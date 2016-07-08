@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Watcher.h"
+#include "EverquestForm.h"
 
 
 Watcher::Watcher()
@@ -22,10 +23,12 @@ void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
 	while ((newLine = sr->ReadLine()) != nullptr)
 	{
 		newLine = sr->ReadLine();
+		+ EverquestForm::getCharName() +
 	}
 	//System::Windows::Forms::MessageBox(newLine);
 	sr->Close();
 	*/
+
 
 	std::string line;
 	std::ifstream inFile;

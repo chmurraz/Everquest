@@ -17,6 +17,7 @@ EverquestForm::EverquestForm()
 		// The ^ hat symbol here is a garbage collection thing from Microsoft https://msdn.microsoft.com/en-us/library/yk97tc08.aspx
 		// gcnew (or garbage collection new) is also a Microsoft thing https://msdn.microsoft.com/en-us/library/te3ecsc8.aspx
 		// These require CLR compiler option
+		MessageBox::Show("GUI is not currently attached to its own thread");
 
 		//	Build the private member variables and other options for the Form
 		BuildPrivate();
@@ -65,6 +66,16 @@ void EverquestForm::LabelBuilder(Label ^ label, int locx, int locy, int tabIndx,
 	this->Controls->Add(label);
 }
 
+System::String ^ EverquestForm::getCharName()
+{
+	return charName;
+}
+
+System::String ^ EverquestForm::getServerName()
+{
+	return serverName;
+}
+
 void EverquestForm::BuildGUIObjects()
 {
 	button1 = gcnew Button();
@@ -101,7 +112,7 @@ void EverquestForm::BuildPrivate()
 void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 {
 	//System::Windows::Forms::Button^ senderAsButton = (System::Windows::Forms::Button^)sender;
-	if (sender == button1)
+	if (sender == button1 && button1->Text == "Click to Start EQ Bot")
 	{
 		// Verify that Everquest is a running process.
 		if (EQHandle == NULL)
@@ -110,6 +121,9 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 		}
 		else
 		{
+			button1->BackColor = System::Drawing::Color::Red;
+			button1->Text = "Click to Stop EQ Bot";
+			this->Refresh();
 			Character^ Necro = gcnew Character;
 
 			//	Move all watcher stuff into the Character class
@@ -119,6 +133,13 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 			logWatcher->setCharacter(Necro);
 			Necro->NecroRoutine();
 		}
+	}
+
+	if (sender == button1 && button1->Text == "Click to Stop EQ Bot")
+	{
+		button1->BackColor = System::Drawing::Color::LightGreen;
+		button1->Text = "Click to Start EQ Bot";
+		this->Refresh();
 	}
 
 	if (sender == button2)
