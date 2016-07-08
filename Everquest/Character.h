@@ -20,7 +20,7 @@ private:
 	//FileSystemWatcher^ watcher;
 	System::String^ keys;
 	DWORD rest;
-	HWND EQHandle;
+	HWND EQHandle;					//	Move this field out of the character class.  Track it at EverquestForms instead.
 	bool fizzled;
 	bool beingHit;
 	bool lowMana;

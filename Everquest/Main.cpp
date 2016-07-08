@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "EverquestForm.h"
 
-[STAThread]
 int main()
 {
 	Console::WriteLine("Drag this console window aside to show the GUI window");
@@ -9,11 +8,8 @@ int main()
 	//	Enable fancy themes if user's OS has them turned on
 	Application::EnableVisualStyles();
 
-	ShowWindow(GetConsoleWindow(), 0);
-
 	//	Run the GUI
-	EverquestForm^ EQform = gcnew EverquestForm();
-	Application::Run(EQform);
+	EverquestForm::Main();
 	
 
 	// *** ATTEMPTS TO MOVE/RESIZE CONSOLE WINDOW *** //

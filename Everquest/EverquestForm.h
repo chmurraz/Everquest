@@ -9,16 +9,38 @@
 //#using <System.dll>
 //#include <cstdio>
 
+using namespace System::Windows::Forms;
+
 public ref class EverquestForm : public System::Windows::Forms::Form
 {
 private:
 	bool consoleShowing;
-	HWND thisHandle;
-	void button1_Click(Object^ sender, EventArgs^ e);
-	void button2_Click(Object^ sender, EventArgs^ e);
+	System::String^ charName;
+	System::String^ serverName;
+
+	Button^ button1;
+	Button^ button2;
+
+	TextBox^ textBox1;
+	TextBox^ textBox2;
+
+	Label^ label1;
+	Label^ label2;
+	Label^ charNameLabel;
+	Label^ serverNameLabel;
+	HWND EQHandle;
+
+	void GUI_Click(Object^ sender, EventArgs^ e);
+	void GUI_TextChanged(Object^ sender, EventArgs^ e);
 public:
 	EverquestForm();
+	void BuildGUIObjects();
+	void BuildPrivate();
+	void ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text);
+	void TextBoxBuilder(TextBox^ box, int locx, int locy, int tabIndx, System::String^ text);
+	void LabelBuilder(Label^ label, int locx, int locy, int tabIndx, System::String^ text);
 
+	static void Main();
 };
 
 #endif

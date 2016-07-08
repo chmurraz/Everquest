@@ -8,8 +8,8 @@
 
 //using namespace System;
 //using namespace System::Runtime::InteropServices;
-//using namespace System::Drawing;
-//using namespace System::Windows::Forms;
+using namespace System::Drawing;
+using namespace System::Windows::Forms;
 //using namespace System::Threading;
 
 EverquestForm::EverquestForm()
@@ -17,57 +17,141 @@ EverquestForm::EverquestForm()
 		// The ^ hat symbol here is a garbage collection thing from Microsoft https://msdn.microsoft.com/en-us/library/yk97tc08.aspx
 		// gcnew (or garbage collection new) is also a Microsoft thing https://msdn.microsoft.com/en-us/library/te3ecsc8.aspx
 		// These require CLR compiler option
-		Text = "Everquest Botter Thingy!";
 
-		//	Set GUI options
-		consoleShowing = false;
-		thisHandle = FindWindowA(NULL, "Everquest Botter Thingy!");
-		Size = System::Drawing::Size(500, 500);
+		//	Build the private member variables and other options for the Form
+		BuildPrivate();
 
-		Button^ button1 = gcnew Button();
-		Button^ button2 = gcnew Button();
-		TextBox^ textBox1 = gcnew TextBox();
-		Label^ label1 = gcnew Label();
-		button1->Location = System::Drawing::Point(10, 10);
-		button2->Location = System::Drawing::Point(10, 40);
-		textBox1->Location = System::Drawing::Point(300, 10);
-		label1->Location = System::Drawing::Point(200, 10);
-
-		//	This will be the "zeroth" button when pressing tab to cycle between them
-		button1->TabIndex = 0;
-		button2->TabIndex = 1;
-		textBox1->TabIndex = 2;
-		button1->Text = "Click to automate EQ";
-		button2->Text = "Show/Hide Console Window";
-		textBox1->Text = "Enter Character Name Here";
-		label1->Text = "Character Name:";
-		button1->AutoSize = true;
-		button2->AutoSize = true;
-		textBox1->AutoSize = true;
-		button1->Click += gcnew EventHandler(this, &EverquestForm::button1_Click);
-		button2->Click += gcnew EventHandler(this, &EverquestForm::button2_Click);
-		this->Controls->Add(button1);
-		this->Controls->Add(button2);
-		this->Controls->Add(textBox1);
-		this->Controls->Add(label1);
+		//	Declare and Build GUI Objects such as buttons, text fields, etc
+		BuildGUIObjects();
 }
 
-void EverquestForm::button1_Click(Object ^ sender, EventArgs ^ e)
+[STAThread]
+void EverquestForm::Main()
 {
-	Character^ Necro = gcnew Character;
-
-	//	Move all watcher stuff into the Character class
-	Watcher^ logWatcher = gcnew Watcher;
-	Necro->MoveEQToFront();
-	logWatcher->ScanLog();
-	logWatcher->setCharacter(Necro);
-	Necro->NecroRoutine();
+	ShowWindow(GetConsoleWindow(), 0);
+	Application::Run(gcnew EverquestForm());
 }
-void EverquestForm::button2_Click(Object ^ sender, EventArgs ^ e)
+
+//	This uses a typedef for a function pointer.  This is declared in EverquestForm.h
+void EverquestForm::ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text)
 {
-	consoleShowing = !consoleShowing;
-	if (consoleShowing)
-		ShowWindow(GetConsoleWindow(), 1);
-	if (!consoleShowing)
-		ShowWindow(GetConsoleWindow(), 0);
+	button->Location = Point(locx, locy);
+	button->TabIndex = tabIndx;
+	button->Text = text;
+	button->AutoSize = true;
+	button->Click += gcnew EventHandler(this, &EverquestForm::GUI_Click);
+	this->Controls->Add(button);
+}
+
+void EverquestForm::TextBoxBuilder(TextBox ^ box, int locx, int locy, int tabIndx, System::String ^ text)
+{
+	box->Location = Point(locx, locy);
+	box->TabIndex = tabIndx;
+	box->Text = text;
+	box->AutoSize = true;
+	box->Width = 200;
+	box->TextChanged += gcnew EventHandler(this, &EverquestForm::GUI_TextChanged);
+	box->Click += gcnew EventHandler(this, &EverquestForm::GUI_Click);
+	this->Controls->Add(box);
+}
+
+void EverquestForm::LabelBuilder(Label ^ label, int locx, int locy, int tabIndx, System::String ^ text)
+{
+	label->Location = Point(locx, locy);
+	label->TabIndex = tabIndx;
+	label->Text = text;
+	label->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
+	label->AutoSize = true;
+	this->Controls->Add(label);
+}
+
+void EverquestForm::BuildGUIObjects()
+{
+	button1 = gcnew Button();
+	button2 = gcnew Button();
+	textBox1 = gcnew TextBox();
+	textBox2 = gcnew TextBox();
+	label1 = gcnew Label();
+	label2 = gcnew Label();
+	charNameLabel = gcnew Label();
+	serverNameLabel = gcnew Label();
+
+	ButtonBuilder(button1, 10, 10, 0, "Click to Start EQ Bot");
+	ButtonBuilder(button2, 10, 40, 1, "Show/Hide Console Window");
+	TextBoxBuilder(textBox1, 325, 10, 2, "Type Here...");
+	TextBoxBuilder(textBox2, 325, 40, 3, "Type Here...");
+	LabelBuilder(label1, 200, 10, 4, "Character Name -->:");
+	LabelBuilder(label2, 200, 40, 5, "Server Name ----->:");
+	LabelBuilder(charNameLabel, 600, 10, 6, "Character Name Set to: N/A");
+	LabelBuilder(serverNameLabel, 600, 40, 7, "Character Name Set to: N/A");
+}
+
+void EverquestForm::BuildPrivate()
+{
+	Text = "Everquest Botter Thingy!";
+	consoleShowing = false;
+	Size = System::Drawing::Size(1000, 500);
+	charName = "";
+	serverName = "";
+
+	//	Note change Properties > General > Character Set to "Use Multi-Byte Character Set" so that FindWindow() works properly.
+	EQHandle = FindWindowA(NULL, "Everquest");
+}
+
+void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
+{
+	//System::Windows::Forms::Button^ senderAsButton = (System::Windows::Forms::Button^)sender;
+	if (sender == button1)
+	{
+		// Verify that Everquest is a running process.
+		if (EQHandle == NULL)
+		{
+			MessageBox::Show("Everquest is not running.");
+		}
+		else
+		{
+			Character^ Necro = gcnew Character;
+
+			//	Move all watcher stuff into the Character class
+			Watcher^ logWatcher = gcnew Watcher;
+			Necro->MoveEQToFront();
+			logWatcher->ScanLog();
+			logWatcher->setCharacter(Necro);
+			Necro->NecroRoutine();
+		}
+	}
+
+	if (sender == button2)
+	{
+		consoleShowing = !consoleShowing;
+		if (consoleShowing)
+			ShowWindow(GetConsoleWindow(), 1);
+		if (!consoleShowing)
+			ShowWindow(GetConsoleWindow(), 0);
+	}
+	if (sender == textBox1 )
+	{
+		textBox1->Text = "";
+	}
+
+	if (sender == textBox2)
+	{
+		textBox2->Text ="";
+	}
+}
+
+void EverquestForm::GUI_TextChanged(Object ^ sender, EventArgs ^ e)
+{
+	if (sender == textBox1)
+	{
+		charName = textBox1->Text;
+	}
+
+	if (sender == textBox2)
+	{
+		serverName = textBox2->Text;
+	}
+	charNameLabel->Text = "Character Name Set to: " + textBox1->Text;
+	serverNameLabel->Text = "Server Name Set to: " + textBox2->Text;
+	this->Refresh();
 }

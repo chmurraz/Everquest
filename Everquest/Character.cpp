@@ -4,14 +4,14 @@
 Character::Character()
 {
 	// Change Visual Studio Properties > General > Character Set to "Use Multi-Byte Character Set" so the arguments in FindWindow() work okay
-	EQHandle = FindWindowA(NULL, "Everquest");
+	//EQHandle = FindWindowA(NULL, "Everquest");
 
 	// Verify that Everquest is a running process.
-	if (EQHandle == NULL)
-	{
-		MessageBox::Show("Everquest is not running.");
-		return;
-	}
+	//if (EQHandle == NULL)
+	//{
+	//	MessageBox::Show("Everquest is not running.");
+	//	return;
+	//}
 
 	ip = new INPUT;
 	keys = "";
