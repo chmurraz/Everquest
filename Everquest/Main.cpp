@@ -9,7 +9,7 @@ int main()
 	Application::EnableVisualStyles();
 
 	//	Run the GUI
-	EverquestForm::Main();
+	EverquestForm::Launch();
 	
 
 	// *** ATTEMPTS TO MOVE/RESIZE CONSOLE WINDOW *** //

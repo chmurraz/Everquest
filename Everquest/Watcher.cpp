@@ -3,82 +3,79 @@
 #include "EverquestForm.h"
 
 
-Watcher::Watcher()
+Watcher::Watcher(Character^ val1, System::String^ cName, System::String^ sName)
 {
-	watcher = gcnew FileSystemWatcher;
-	//newLine = "";
+	fileWatcher = gcnew FileSystemWatcher;
 
 	//	Set the path
-	watcher->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
+	fileWatcher->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
 
 	//	Filter to only watch text files
-	watcher->Filter = "*.txt";
+	fileWatcher->Filter = "*.txt";
+
+	//	Add event handlers
+	fileWatcher->Changed += gcnew FileSystemEventHandler(Watcher::OnChange);
+	fileWatcher->EnableRaisingEvents = true;
+
+	character = val1;
+	charName = cName;
+	serverName = sName;
+	fileName = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
+	fileName += charName + "_" + serverName + ".txt";
+
+	//	Erase the old log files
+	File::Delete(fileName);
 }
 
 void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
 {
-	/*
-	sr = File::OpenText("C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_Xahul_phinigel.txt");
-	newLine = sr->ReadLine();
-	while ((newLine = sr->ReadLine()) != nullptr)
+	//	Scan each line in the batch of lines added to the eqlog.txt file
+	//	Compare each line to the last line read by the character object
+	//	If a line is newer than the last line read by the character object, then launch a character state updater thread
+	//	Repeat until end of stream
+
+	try
 	{
-		newLine = sr->ReadLine();
-		+ EverquestForm::getCharName() +
-	}
-	//System::Windows::Forms::MessageBox(newLine);
-	sr->Close();
-	*/
-
-
-	std::string line;
-	std::ifstream inFile;
-	inFile.open("C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_Xahul_phinigel.txt");
-
-
-	//	Scan through the log and extract the last lines.  Send them through log flag filter routine
-
-	//	Extract the last line read by the character object and convert to System::String^
-	System::String^ currentLine;
-	bool foundLastLineReadInLog = false;
-	while (inFile >> std::ws && std::getline(inFile, line))
-	{
-		//	Convert the line of the log being read to a System::String^
-		currentLine = gcnew String(line.c_str());
-
-		//	If the lastLineRead is empty, make this line the lastLineRead and send it to Flags routine
-		if (character->getLastLineRead() == "")
+		sr = File::OpenText(fileName);
+		bool foundLastLineReadInLog = false;
+		while (!sr->EndOfStream)
 		{
-			character->setLastLineRead(currentLine);
-			WatcherThreadWithState^ wtws = gcnew WatcherThreadWithState(character, currentLine);
-			Thread^ logThread = gcnew Thread(gcnew ThreadStart(wtws, &WatcherThreadWithState::ThreadProc));
-			logThread->Start();
-			//character->LogFlags(currentLine);
-		}
+			newLine = sr->ReadLine();
 
-		//	Otherwise, the lastLineRead is nonempty.  Set a flag and only send lines encountered after that
-		else
-		{
-			if (currentLine == character->getLastLineRead())
-				foundLastLineReadInLog = true;
-			if (foundLastLineReadInLog && (currentLine != character->getLastLineRead()))
+			//	Check if last line read by character object is empty
+			if (character->getLastLineRead() == "")
 			{
-				WatcherThreadWithState^ wtws = gcnew WatcherThreadWithState(character, currentLine);
-				Thread^ logThread = gcnew Thread(gcnew ThreadStart(wtws, &WatcherThreadWithState::ThreadProc));
-				logThread->Start();
-				//character->LogFlags(currentLine);
+				foundLastLineReadInLog = true;
+				LaunchCharStateUpdateThread(newLine);
+			}
+
+			//	If it is non empty, then compare the currently read line in the log to the last line read by the character
+			else
+			{
+				if (newLine == character->getLastLineRead())
+					foundLastLineReadInLog = true;
+				if (foundLastLineReadInLog && (newLine != character->getLastLineRead()))
+					LaunchCharStateUpdateThread(newLine);
 			}
 		}
 
-	};
-	character->setLastLineRead(currentLine);
-	inFile.close();
+		//	Close the stream reader
+		sr->Close();
+	}
+	catch (Exception^ ioex)
+	{
+		throw gcnew Exception("\nAn error occured when opening the log file.  It is likely you have an incorrect character or server name.  The first letter of a character names must be capitalized.  Server names are NOT capitalized (all letters are lower case).", ioex);
+	}
+
 }
 
-void Watcher::ScanLog()
+void Watcher::LaunchCharStateUpdateThread(System::String ^ newLine)
 {
-	//	Add event handlers
-	watcher->Changed += gcnew FileSystemEventHandler(Watcher::OnChange);
-	watcher->EnableRaisingEvents = true;
+	character->setLastLineRead(newLine);
+	CharacterStateUpdater^ charState = gcnew CharacterStateUpdater(character, newLine);
+	ThreadStart^ threadDelegate = gcnew ThreadStart(charState, &CharacterStateUpdater::ThreadUpdate);
+	Thread^ logThread = gcnew Thread(threadDelegate);
+	logThread->Start();
 }
 
 void Watcher::setCharacter(Character ^ val)
@@ -86,111 +83,147 @@ void Watcher::setCharacter(Character ^ val)
 	character = val;
 }
 
-WatcherThreadWithState::WatcherThreadWithState(Character^ val1, String^ val2)
+Character ^ Watcher::getCharacter()
 {
-	threadCharacter = val1;
-	threadLine = val2;
+	return character;
 }
 
-void WatcherThreadWithState::ThreadProc()
+CharacterStateUpdater::CharacterStateUpdater(Character ^ val1, String ^ val2)
 {
+	character = val1;
+	newLine = val2;
+}
 
+void CharacterStateUpdater::ThreadUpdate()
+{
 	//	Update character member variables based on new line activity
 
 	//	Experience
-	if (threadLine->Contains("You gain experience"))
-		threadCharacter->setExp(true);
+	if (newLine->Contains("You gain experience"))
+	{
+		character->setExp(true);
+		Console::WriteLine("Experience gained");
+	}
 
 	//	Buffs
-	if (threadLine->Contains("You do not sense any enchantments"))
-		threadCharacter->setShielding(false);
-	if (threadLine->Contains("Minor Shielding"))
-		threadCharacter->setShielding(true);
-	if (threadLine->Contains("You feel armored"))
-		threadCharacter->setShielding(true);
-	if (threadLine->Contains("Your shielding fades away"))
-		threadCharacter->setShielding(false);
+	if (newLine->Contains("You do not sense any enchantments"))
+	{
+		character->setShielding(false);
+		Console::WriteLine("No buffs");
+	}	
+	if (newLine->Contains("Minor Shielding"))
+	{
+		character->setShielding(true);
+		Console::WriteLine("Minor Shielding buff found");
+	}
+	if (newLine->Contains("You feel armored"))
+	{
+		character->setShielding(true);
+		Console::WriteLine("Minor Shielding sucessfully cast");
+	}
+	if (newLine->Contains("Your shielding fades away"))
+	{
+		character->setShielding(false);
+		Console::WriteLine("Shielding buff fades away");
+	}
 
 	//	Target
-	if (threadLine->Contains("looks kind of risky") ||
-		threadLine->Contains("looks like an even fight"))
+	if (newLine->Contains("looks kind of risky") ||
+		newLine->Contains("looks like an even fight"))
 	{
-		threadCharacter->setValidTarget(true);
+		character->setValidTarget(true);
 		Console::WriteLine("Setting valid target to TRUE");
 	}
 
-	if (threadLine->Contains("must first select a target for this spell"))
+	if (newLine->Contains("must first select a target for this spell"))
 	{
-		threadCharacter->setValidTarget(false);
+		character->setValidTarget(false);
 		Console::WriteLine("Invalid target:  NO TARGET");
 	}
 
-	if (threadLine->Contains("no longer have a target"))
+	if (newLine->Contains("no longer have a target"))
 	{
-		threadCharacter->setValidTarget(false);
+		character->setValidTarget(false);
 		Console::WriteLine("Invalid target:  NO TARGET... pressed ESC");
 	}
 
-	if (threadLine->Contains("can't drain yourself"))
+	if (newLine->Contains("can't drain yourself"))
 	{
-		threadCharacter->setValidTarget(false);
+		character->setValidTarget(false);
 		Console::WriteLine("Invalid target:  attempting to lifespike self");
 	}
 
-	if (threadLine->Contains("target is out of range"))
+	if (newLine->Contains("target is out of range"))
 	{
-		threadCharacter->setValidTarget(false);
+		character->setValidTarget(false);
 		Console::WriteLine("Invalid target:  out of range");
 	}
 
-	if (threadLine->Contains("cannot see your target"))
+	if (newLine->Contains("cannot see your target"))
 	{
-		threadCharacter->setValidTarget(false);
+		character->setValidTarget(false);
 		Console::WriteLine("Invalid target:  can't see");
 	}
 
-	if (threadLine->Contains("a skunk"))
+	if (newLine->Contains("a skunk"))
 	{
-		threadCharacter->setValidTarget(false);
+		character->setValidTarget(false);
 		Console::WriteLine("Invalid target:  skunk");
 	}
 
-	if (threadLine->Contains("this corpse will decay in"))
+	if (newLine->Contains("this corpse will decay in"))
 	{
-		threadCharacter->setValidTarget(false);
+		character->setValidTarget(false);
 		Console::WriteLine("Invalid target:  corpse");
 	}
 
-
-		
-
 	//	Pet Alive or Dead or In Combat
-	if (threadLine->Contains("Changing position") ||
-		threadLine->Contains("Targeting your pet") ||
-		threadLine->Contains("cannot have more than one pet at a time"))
-		threadCharacter->setPetAlive(true);
-	if (threadLine->Contains("don't have a pet to command"))
-		threadCharacter->setPetAlive(false);
-	if (threadLine->Contains("tells you, 'Attacking") && threadLine->Contains("Master"))
-		threadCharacter->setPetInCombat(true);
+	if (newLine->Contains("Changing position") ||
+		newLine->Contains("Targeting your pet") ||
+		newLine->Contains("cannot have more than one pet at a time"))
+	{
+		character->setPetAlive(true);
+		Console::WriteLine("Pet is alive");
+	}
+	if (newLine->Contains("don't have a pet to command"))
+	{
+		character->setPetAlive(false);
+		Console::WriteLine("No pet found");
+	}
+	if (newLine->Contains("tells you, 'Attacking") && newLine->Contains("Master"))
+	{
+		character->setPetInCombat(true);
+		Console::WriteLine("Pet is in combat");
+	}
 
 	//	Casting spells
-	if (threadLine->Contains("Your spell fizzles"))
+	if (newLine->Contains("Your spell fizzles"))
 	{
-		threadCharacter->setFizzled(true);
-		threadCharacter->setCastingSpell(false);
+		character->setFizzled(true);
+		character->setCastingSpell(false);
+		Console::WriteLine("Spell fizzled");
 	}
-	if (threadLine->Contains("You begin casting") ||
-		threadLine->Contains("Yuse that command while casting") ||
-		threadLine->Contains("You haven't recovered yet") ||
-		threadLine->Contains("Your spell is interrupted"))
+	if (newLine->Contains("You begin casting") ||
+		newLine->Contains("Yuse that command while casting") ||
+		newLine->Contains("You haven't recovered yet") ||
+		newLine->Contains("Your spell is interrupted"))
 	{
-		threadCharacter->setCastingSpell(true);
-		threadCharacter->setFizzled(false);
+		character->setCastingSpell(true);
+		character->setFizzled(false);
+		Console::WriteLine("Spell sucessful");
 	}
 
 	//	Combat
-	if (threadLine->Contains("YOU for") || threadLine->Contains("YOU, but misses"))
-		threadCharacter->setBeingHit(true);
+	if (newLine->Contains("YOU for") || newLine->Contains("YOU, but misses"))
+	{
+		character->setBeingHit(true);
+		Console::WriteLine("Character being hit");
+	}
 
+	//	Low Mana
+	if (newLine->Contains("Insufficient Mana to cast this spell!"))
+	{
+		character->setLowMana(true);
+		Console::WriteLine("Low mana");
+	}		
 }

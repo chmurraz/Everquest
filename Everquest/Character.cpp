@@ -3,16 +3,6 @@
 
 Character::Character()
 {
-	// Change Visual Studio Properties > General > Character Set to "Use Multi-Byte Character Set" so the arguments in FindWindow() work okay
-	//EQHandle = FindWindowA(NULL, "Everquest");
-
-	// Verify that Everquest is a running process.
-	//if (EQHandle == NULL)
-	//{
-	//	MessageBox::Show("Everquest is not running.");
-	//	return;
-	//}
-
 	ip = new INPUT;
 	keys = "";
 	rest = 0;
@@ -45,7 +35,6 @@ void Character::PressKeys(INPUT* ip, System::String^ keys, DWORD rest)
 {
 	if (DEBUGMODE)
 	{
-		MoveEQToFront();
 		Sleep(2000);
 	}
 
@@ -70,6 +59,7 @@ void Character::PressKeys(INPUT* ip, System::String^ keys, DWORD rest)
 	Sleep(rest);
 }
 
+/*	DEPRECATED... MAY REMOVE THIS LATER
 bool Character::SearchLog(std::string text)
 {
 	bool boolValue = false;
@@ -94,6 +84,7 @@ bool Character::SearchLog(std::string text)
 
 	return boolValue;
 }
+*/
 
 void Character::PetAssist()
 {
@@ -123,44 +114,6 @@ bool Character::getPetInCombat()
 	return petInCombat;
 }
 
-bool Character::LowMana()
-{
-	lowMana = SearchLog("Insufficient Mana to cast this spell!");
-	if (lowMana)
-		this->Talk(true, "my mana is low");
-	return lowMana;
-}
-
-void Character::EraseLog()
-{
-	remove("C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_Xahul_phinigel.txt");
-	this->Talk(true, "erasing log");
-}
-
-bool Character::InRange()
-{
-	return !(SearchLog("Your target is out of range, get closer!"));
-}
-
-bool Character::BeingHit()
-{
-	beingHit = SearchLog("YOU for") || SearchLog("YOU, but misses!");
-	if (beingHit)
-	{
-		this->Talk(true, "am being hit");
-		PressESC();
-	}
-		
-	else
-		this->Talk(true, "am not being hit");
-	return beingHit;
-}
-
-bool Character::Died()
-{
-	return SearchLog("You have been slain by");
-}
-
 void Character::FindValidTarget()
 {
 	Console::WriteLine("Finding a valid target");
@@ -168,8 +121,6 @@ void Character::FindValidTarget()
 	std::string target;
 	do
 	{
-		this->Talk(true, "finding a valid target");
-		MoveEQToFront();
 		PressTab();
 		VerifyTarget();
 		Sleep(1000);
@@ -188,120 +139,22 @@ void Character::VerifyTarget()
 		PressKeys(ip, "t is valid\r", typeSpeed);
 	}
 
-	this->Talk(true, "verifying");
 	Consider();
 
-	this->Talk(validTarget, "my target is valid");
-	this->Talk(!validTarget, "invalid target");
-}
-
-/*
-void Character::OnLogChange(Object ^, FileSystemEventArgs ^ e)
-{
-	//	Get the last line of the log
-	//	Can't just use "getLastLine()" because OnLogChange is static
-
-	//std::string line;
-	//std::ifstream inFile;
-	//inFile.open("C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_Xahul_phinigel.txt");
-
-	//while (inFile >> std::ws && std::getline(inFile, line))
-	//{
-	//};
-	//System::String^ newLine = gcnew String(line.c_str());
-	//inFile.close();
-
-	//System::Windows::Forms::MessageBox(newLine);
-}
-*/
-
-void Character::LogFlags(System::String^ newLine)
-{
-	//	REMOVE THIS FUNCTION FROM CHARACTER.H/CPP IF IT IS SUCESSFULLY INCLUDED IN WATCHER THREAD CLASS
-
-	//	Update character member variables based on new line activity
-
-	//	Experience
-	if (newLine->Contains("You gain experience"))
-		experience = true;
-
-	//	Buffs
-	if (newLine->Contains("You do not sense any enchantments"))
-		shielding = false;
-	if (newLine->Contains("Minor Shielding"))
-		shielding = true;
-	if (newLine->Contains("You feel armored"))
-		shielding = true;
-	if (newLine->Contains("Your shielding fades away"))
-		shielding = false;
-
-	//	Target
-	if (newLine->Contains("looks kind of risky") ||
-		newLine->Contains("looks like an even fight"))
-	{
-		targetingCorpse = false;
-		validTarget = true;
-	}
-	if (newLine->Contains("no longer have a target") ||
-		newLine->Contains("must first select a target for this spell") ||
-		newLine->Contains("can't drain yourself") ||
-		(petAlive && newLine->Contains(petName)) ||
-		newLine->Contains("target is out of range") ||
-		newLine->Contains("cannot see your target") ||
-		newLine->Contains("a skunk") ||
-		newLine->Contains("This corpse will decay in"))
-		validTarget = false;
-
-	//	Pet Alive or Dead or In Combat
-	if (newLine->Contains("Changing position") ||
-		newLine->Contains("Targeting your pet") ||
-		newLine->Contains("cannot have more than one pet at a time"))
-		petAlive = true;
-	if (newLine->Contains("don't have a pet to command"))
-		petAlive = false;
-	if (newLine->Contains("tells you, 'Attacking") && newLine->Contains("Master"))
-		petInCombat = true;
-
-	//	Casting spells
-	if (newLine->Contains("Your spell fizzles"))
-	{
-		fizzled = true;
-		castingSpell = false;
-	}
-	if (newLine->Contains("You begin casting") ||
-		newLine->Contains("Yuse that command while casting") ||
-		newLine->Contains("You haven't recovered yet") ||
-		newLine->Contains("Your spell is interrupted"))
-	{
-		castingSpell = true;
-		fizzled = false;
-	}
-
-	//	Combat
-	if (newLine->Contains("YOU for") || newLine->Contains("YOU, but misses"))
-		beingHit = true;
 }
 
 void Character::NecroRoutine()
 {
-	MoveEQToFront();
-	EraseLog();
 	LogOn();
 
-	Console::WriteLine("Current loop iteration is ");
-	MoveEQToFront();
 	experience = false;
 	beingHit = false;
 	petInCombat = false;
-	MoveEQToFront();
 
 	HideCorpses();
 	PressESC();
-	MoveEQToFront();
 	TargetPet();
-	MoveEQToFront();
 	PetSit();
-	MoveEQToFront();
 	InspectBuffs();
 	if (!shielding)
 	{
@@ -314,19 +167,17 @@ void Character::NecroRoutine()
 	setPetName();
 	FindValidTarget();
 
-	// Main combat loop
+	// Main combat loop ... do this as long as the character is being hit
 	do
 	{
+		//	Sub loop, do this as long as current target is alive
 		do
 		{
-			MoveEQToFront();
 			//Consider();
-			MoveEQToFront();
 			PetAttack();
 			LifeSpike();
 			if (!validTarget)
 			{
-				MoveEQToFront();
 				PetBackOff();
 			}
 			AssistPet();
@@ -351,7 +202,6 @@ void Character::NecroRoutine()
 		}
 	} while (beingHit);
 
-	MoveEQToFront();
 	Sleep(1000);
 	Sit();
 	Sleep(3000);
@@ -365,7 +215,6 @@ void Character::NecroRoutine()
 
 	
 	routineStop = true;
-	Talk(true, "routine finished");
 }
 
 System::String ^ Character::getLastLine()
@@ -429,32 +278,22 @@ bool Character::getCastingSpell()
 
 void Character::Consider()
 {
-	this->Talk(true, "conning target");
 	PressKeys(ip, "/con\r", 50);
-}
-
-void Character::MoveEQToFront()
-{
-	SetForegroundWindow(EQHandle);
-	Sleep(2000);
 }
 
 void Character::LogOn()
 {
 	PressKeys(ip, "/log on\r", 1000);
-	this->Talk(true,"turning log on");
 }
 
 void Character::HideCorpses()
 {
 	Console::WriteLine("Hiding corpses");
-	this->Talk(true, "hiding corpses");
 	PressKeys(ip, "/hidecorpse all\r", 1000);
 }
 
 void Character::PressESC()
 {
-	this->Talk(true, "releasing target");
 	ip->type = INPUT_KEYBOARD;
 	ip->ki.dwExtraInfo = GetMessageExtraInfo();
 	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_ESCAPE, MAPVK_VK_TO_VSC));
@@ -536,12 +375,6 @@ void Character::SummonPet()
 	Sit();
 }
 
-bool Character::SpellFizzle()
-{
-	fizzled = SearchLog("Your spell fizzles!");
-	return fizzled;
-}
-
 void Character::PetSit()
 {
 	Console::WriteLine("Telling pet to sit");
@@ -591,16 +424,6 @@ void Character::Snare()
 {
 }
 
-bool Character::CannotSeeTarget()
-{
-	return SearchLog("You cannot see your target");
-}
-
-bool Character::TargetOutOfRange()
-{
-	return SearchLog("Your target is out of range, get closer!");
-}
-
 void Character::setFizzled(bool val)
 {
 	fizzled = val;
@@ -648,7 +471,6 @@ System::String ^ Character::getPetName()
 
 void Character::PetBackOff()
 {
-	this->Talk(true, "backing pet off");
 	PressKeys(ip, "/pet back off\r", 3000);
 }
 
@@ -704,12 +526,4 @@ void Character::setExp(bool val)
 bool Character::getValidTarget()
 {
 	return validTarget;
-}
-
-void Character::Talk(bool criteria, System::String^ text)
-{
-	if (criteria && talkFlag)
-	{
-		PressKeys(ip, "/gu "+ text +"\r", typeSpeed);
-	}	
 }

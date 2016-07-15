@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-//#include <msclr\marshal_windows.h>
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 using namespace System;
@@ -20,7 +19,6 @@ private:
 	//FileSystemWatcher^ watcher;
 	System::String^ keys;
 	DWORD rest;
-	HWND EQHandle;					//	Move this field out of the character class.  Track it at EverquestForms instead.
 	bool fizzled;
 	bool beingHit;
 	bool lowMana;
@@ -45,7 +43,7 @@ public:
 	Character();
 	~Character();
 	
-	bool SearchLog(std::string text);
+	//bool SearchLog(std::string text);			//	deprecated, may remove eventually... commenting out for now
 
 	//	Keyboard Sim
 	void PressKeys(INPUT* ip, System::String^ keys, DWORD rest);
@@ -93,36 +91,25 @@ public:
 	System::String^ getLastLineRead();
 
 	// TBD
-	bool LowMana();
-	void EraseLog();
-	bool InRange();
-	bool BeingHit();
-	bool Died();
 	void FindValidTarget();
 	void Consider();
-	void MoveEQToFront();
 	void LogOn();
 	void HideCorpses();
 	
 	void SummonPet();
-	bool SpellFizzle();
 	void PetSit();
 	void Sit();
 	void PetAttack();
 	void AssistPet();
 
-	bool CannotSeeTarget();
-	bool TargetOutOfRange();
 	void PetBackOff();
 	void TargetPet();
 
-
-	void Talk(bool criteria, System::String^ text);
 	void VerifyTarget();
 
 	//	Log stuff
 	//static void OnLogChange(Object ^ obj, FileSystemEventArgs^ e);
-	void LogFlags(System::String^ newLine);					//	This is the new log text file logic routine
+	//void LogFlags(System::String^ newLine);					//	This is the new log text file logic routine
 	void NecroRoutine();
 	
 };

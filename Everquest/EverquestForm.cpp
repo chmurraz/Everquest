@@ -1,36 +1,27 @@
-// Everquest.cpp : Defines the entry point for the console application.
-
-
-//	REMOVE ALL REFERENCES TO LOGWATCHER CLASS ONCE WATCHER CLASS IS WORKING
-
 #include "stdafx.h"
 #include "EverquestForm.h"
 
-//using namespace System;
-//using namespace System::Runtime::InteropServices;
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
-//using namespace System::Threading;
+
+[STAThread]
+void EverquestForm::Launch()
+{
+	ShowWindow(GetConsoleWindow(), 0);
+	Application::Run(gcnew EverquestForm());
+}
 
 EverquestForm::EverquestForm()
 {
 		// The ^ hat symbol here is a garbage collection thing from Microsoft https://msdn.microsoft.com/en-us/library/yk97tc08.aspx
 		// gcnew (or garbage collection new) is also a Microsoft thing https://msdn.microsoft.com/en-us/library/te3ecsc8.aspx
 		// These require CLR compiler option
-		MessageBox::Show("GUI is not currently attached to its own thread");
 
 		//	Build the private member variables and other options for the Form
 		BuildPrivate();
 
 		//	Declare and Build GUI Objects such as buttons, text fields, etc
 		BuildGUIObjects();
-}
-
-[STAThread]
-void EverquestForm::Main()
-{
-	ShowWindow(GetConsoleWindow(), 0);
-	Application::Run(gcnew EverquestForm());
 }
 
 //	This uses a typedef for a function pointer.  This is declared in EverquestForm.h
@@ -99,11 +90,12 @@ void EverquestForm::BuildGUIObjects()
 
 void EverquestForm::BuildPrivate()
 {
-	Text = "Everquest Botter Thingy!";
+	Text = "EQ Botter Thingy!";
 	consoleShowing = false;
-	Size = System::Drawing::Size(1000, 500);
+	Size = System::Drawing::Size(900, 200);
 	charName = "";
 	serverName = "";
+	charAndServerLocked = false;
 
 	//	Note change Properties > General > Character Set to "Use Multi-Byte Character Set" so that FindWindow() works properly.
 	EQHandle = FindWindowA(NULL, "Everquest");
@@ -112,34 +104,41 @@ void EverquestForm::BuildPrivate()
 void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 {
 	//System::Windows::Forms::Button^ senderAsButton = (System::Windows::Forms::Button^)sender;
-	if (sender == button1 && button1->Text == "Click to Start EQ Bot")
+	if (sender == button1 && button1->Text)
 	{
-		// Verify that Everquest is a running process.
-		if (EQHandle == NULL)
+		if (button1->Text == "Click to Start EQ Bot")
 		{
-			MessageBox::Show("Everquest is not running.");
+			// Verify that Everquest is a running process.
+			if (EQHandle == NULL)
+			{
+				MessageBox::Show("Everquest is not running.");
+			}
+			else
+			{
+				button1->BackColor = System::Drawing::Color::Red;
+				button1->Text = "Click to Stop EQ Bot";
+				this->Refresh();
+
+				System::String^ charName = textBox1->Text;
+				System::String^ servName = textBox2->Text;
+
+				//	Char and watcher is a wrapper class that holds the char, the watcher and any buttons it GUI objects
+				//	Used to create a thread delegate object
+
+				CharAndWatcher^ charAndWatcher = gcnew CharAndWatcher(charName, servName);
+
+				ThreadStart^ threadDelegate = gcnew ThreadStart(charAndWatcher, &CharAndWatcher::RoutineLaunch);
+				Thread^ routineThread = gcnew Thread(threadDelegate);
+				MoveEQToFront();
+				routineThread->Start();
+			}
 		}
-		else
+		else if (button1->Text == "Click to Stop EQ Bot")
 		{
-			button1->BackColor = System::Drawing::Color::Red;
-			button1->Text = "Click to Stop EQ Bot";
+			button1->BackColor = System::Drawing::Color::LightGreen;
+			button1->Text = "Click to Start EQ Bot";
 			this->Refresh();
-			Character^ Necro = gcnew Character;
-
-			//	Move all watcher stuff into the Character class
-			Watcher^ logWatcher = gcnew Watcher;
-			Necro->MoveEQToFront();
-			logWatcher->ScanLog();
-			logWatcher->setCharacter(Necro);
-			Necro->NecroRoutine();
 		}
-	}
-
-	if (sender == button1 && button1->Text == "Click to Stop EQ Bot")
-	{
-		button1->BackColor = System::Drawing::Color::LightGreen;
-		button1->Text = "Click to Start EQ Bot";
-		this->Refresh();
 	}
 
 	if (sender == button2)
@@ -175,4 +174,30 @@ void EverquestForm::GUI_TextChanged(Object ^ sender, EventArgs ^ e)
 	charNameLabel->Text = "Character Name Set to: " + textBox1->Text;
 	serverNameLabel->Text = "Server Name Set to: " + textBox2->Text;
 	this->Refresh();
+}
+
+void EverquestForm::MoveEQToFront()
+{
+	SetForegroundWindow(EQHandle);
+	Sleep(2000);
+}
+
+CharAndWatcher::CharAndWatcher(System::String^ cName, System::String^ sName)
+{
+	character = gcnew Character();
+	logWatcher = gcnew Watcher(character, cName, sName);
+}
+
+void CharAndWatcher::RoutineLaunch()
+{
+	for (int i = 1; i <= 10; i++)
+	{
+		logWatcher->setCharacter(character);
+		Console::WriteLine("Routine started.  Iteration = " + i);
+		character->NecroRoutine();
+		Console::WriteLine("Routine ended.  Iteration = " + i);
+	}
+	Console::WriteLine("Exiting...");
+	Sleep(3000);
+	Application::Exit();
 }
