@@ -6,23 +6,7 @@ Character::Character()
 	ip = new INPUT;
 	keys = "";
 	rest = 0;
-	fizzled = false;
-	beingHit = false;
-	lowMana = false;
-	petInCombat = false;
-	experience = false;
-	validTarget = false;
-	petAlive = false;
-	typeSpeed = 30;
-	routineStop = false;
-	petName = "";
-	targetingCorpse = false;
 	lastLineRead = "";
-
-	//	Debugging member variables
-	DEBUGMODE = false;
-	talkFlag = false;
-	shielding =false;
 }
 
 Character::~Character()
@@ -33,11 +17,6 @@ Character::~Character()
 
 void Character::PressKeys(INPUT* ip, System::String^ keys, DWORD rest)
 {
-	if (DEBUGMODE)
-	{
-		Sleep(2000);
-	}
-
 	for (unsigned i = 0; i < keys->Length; i++)
 	{
 		ip->type = INPUT_KEYBOARD;
@@ -58,33 +37,6 @@ void Character::PressKeys(INPUT* ip, System::String^ keys, DWORD rest)
 	}
 	Sleep(rest);
 }
-
-/*	DEPRECATED... MAY REMOVE THIS LATER
-bool Character::SearchLog(std::string text)
-{
-	bool boolValue = false;
-
-	std::ifstream inFile;
-	inFile.open("C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_Xahul_phinigel.txt");
-
-	std::size_t found;
-	std::string line;
-	if (inFile.is_open())
-	{
-		while (!inFile.eof())
-		{
-			getline(inFile, line);
-			if ((found = line.find(text, 0)) != std::string::npos)
-			{
-				boolValue = true;
-			}
-		}
-		inFile.close();
-	}
-
-	return boolValue;
-}
-*/
 
 void Character::PetAssist()
 {

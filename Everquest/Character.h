@@ -16,29 +16,11 @@ ref class Character
 {
 private:
 	INPUT* ip;
-	//FileSystemWatcher^ watcher;
 	System::String^ keys;
 	DWORD rest;
-	bool fizzled;
-	bool beingHit;
-	bool lowMana;
-	bool petInCombat;
-	bool experience;
-	bool talkFlag;
-	bool validTarget;
-	bool petAlive;
-	bool castingSpell;
 	DWORD typeSpeed;
-	bool routineStop;
-	bool DEBUGMODE;
-	//	Buffs
-	bool shielding;
-	bool targetingCorpse;
-
-	System::String^ petName;
 	System::String^ lastLineRead;
 	
-
 public:
 	Character();
 	~Character();
