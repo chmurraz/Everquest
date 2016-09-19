@@ -116,41 +116,24 @@ bool Character::getPetInCombat()
 
 void Character::FindValidTarget()
 {
-	Console::WriteLine("Finding a valid target");
+	Console::WriteLine("Finding a valid target...");
+	Console::WriteLine("Setting Target invalid");
 	validTarget = false;
-	std::string target;
 	do
 	{
 		PressTab();
-		VerifyTarget();
+		Consider();
 		Sleep(1000);
 
 	} while (!validTarget);
 }
 
-void Character::VerifyTarget()
-{
-	if (talkFlag)
-	{
-		PressKeys(ip, "/gu verifying ", typeSpeed);
-		HoldShift();
-		PressKeys(ip, "5", typeSpeed);
-		ReleaseShift();
-		PressKeys(ip, "t is valid\r", typeSpeed);
-	}
-
-	Consider();
-
-}
-
-void Character::NecroRoutine()
+void Character::NecroStartUp()
 {
 	LogOn();
-
 	experience = false;
 	beingHit = false;
 	petInCombat = false;
-
 	HideCorpses();
 	PressESC();
 	TargetPet();
@@ -165,43 +148,43 @@ void Character::NecroRoutine()
 	if (!petAlive)
 		SummonPet();
 	setPetName();
-	FindValidTarget();
+}
 
-	// Main combat loop ... do this as long as the character is being hit
+void Character::NecroNuke()
+{
+	//	Loop while current target is alive
 	do
 	{
-		//	Sub loop, do this as long as current target is alive
-		do
+		PetAttack();
+		LifeSpike();
+		if (!validTarget)
 		{
-			//Consider();
-			PetAttack();
-			LifeSpike();
-			if (!validTarget)
-			{
-				PetBackOff();
-			}
-			AssistPet();
-			VerifyTarget();
-		} while (!experience && validTarget && !beingHit);
-
-		if (beingHit)
-		{
-			// Press SHIFT + TAB to target nearest NPC
-			HoldShift();
-			PressTab();
-			ReleaseShift();
-			PetAttack();
-		}
-
-		if (experience)
-		{
-			PressESC();
 			PetBackOff();
-			beingHit = false;
-			petInCombat = false;
 		}
-	} while (beingHit);
+		AssistPet();
+		Consider();
+	} while (!experience && validTarget && !beingHit);
+}
 
+void Character::NecroBeingHit()
+{
+	// Press SHIFT + TAB to target nearest NPC
+	HoldShift();
+	PressTab();
+	ReleaseShift();
+	PetAttack();
+}
+
+void Character::NecroGotExp()
+{
+	PressESC();
+	PetBackOff();
+	beingHit = false;
+	petInCombat = false;
+}
+
+void Character::NecroCleanUp()
+{
 	Sleep(1000);
 	Sit();
 	Sleep(3000);
@@ -210,11 +193,51 @@ void Character::NecroRoutine()
 	PressESC();
 	if (lowMana & !beingHit)
 	{
-		Sleep(35000);
+		NecroMedBreak();
 	}
 
-	
+	//	Reset experience or the routine will just fall through the main combat loop at next execution
+	experience = false;
 	routineStop = true;
+}
+
+void Character::NecroMedBreak()
+{
+	Sit();
+	int i = 60;
+	do
+	{
+		Console::WriteLine("Med break with " + i + " seconds remaining");
+		Sleep(1000);
+		i--;
+	} while (!beingHit);
+	lowMana = false;
+}
+
+void Character::ClericHealSkillUp()
+{
+	PressKeys(ip, "/cast 2\r", 1000);
+}
+
+
+void Character::NecroMain()
+{
+
+	FindValidTarget();
+
+	// Main combat loop ... do this as long as the character is being hit
+	do
+	{
+		NecroNuke();
+		if (beingHit)
+			NecroBeingHit();
+
+		if (experience)
+			NecroGotExp();
+
+	} while (beingHit);
+
+	NecroCleanUp();
 }
 
 System::String ^ Character::getLastLine()
@@ -384,6 +407,7 @@ void Character::PetSit()
 void Character::Sit()
 {
 	Console::WriteLine("Sitting");
+	PressKeys(ip, "/stand\r", 250);
 	if (!beingHit)
 		PressKeys(ip, "/sit\r", 250);
 }

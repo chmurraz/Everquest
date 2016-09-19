@@ -105,12 +105,17 @@ public:
 	void PetBackOff();
 	void TargetPet();
 
-	void VerifyTarget();
-
 	//	Log stuff
 	//static void OnLogChange(Object ^ obj, FileSystemEventArgs^ e);
 	//void LogFlags(System::String^ newLine);					//	This is the new log text file logic routine
-	void NecroRoutine();
+	void NecroMain();
+	void NecroNuke();
+	void NecroBeingHit();
+	void NecroGotExp();
+	void NecroCleanUp();
+	void NecroStartUp();
+	void NecroMedBreak();
+	void ClericHealSkillUp();
 	
 };
 

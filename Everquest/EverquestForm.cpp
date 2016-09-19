@@ -190,13 +190,16 @@ CharAndWatcher::CharAndWatcher(System::String^ cName, System::String^ sName)
 
 void CharAndWatcher::RoutineLaunch()
 {
-	for (int i = 1; i <= 10; i++)
+	//character->NecroStartUp();
+	for (int i = 1; i <= 100; i++)
 	{
-		logWatcher->setCharacter(character);
-		Console::WriteLine("Routine started.  Iteration = " + i);
-		character->NecroRoutine();
-		Console::WriteLine("Routine ended.  Iteration = " + i);
+		//logWatcher->setCharacter(character);
+		//Console::WriteLine("Routine started.  Iteration = " + i);
+		//character->NecroMain();
+		//Console::WriteLine("Routine ended.  Iteration = " + i);
+		character->ClericHealSkillUp();
 	}
+	
 	Console::WriteLine("Exiting...");
 	Sleep(3000);
 	Application::Exit();

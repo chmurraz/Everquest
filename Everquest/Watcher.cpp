@@ -128,11 +128,16 @@ void CharacterStateUpdater::ThreadUpdate()
 	}
 
 	//	Target
-	if (newLine->Contains("looks kind of risky") ||
-		newLine->Contains("looks like an even fight"))
+	if (newLine->Contains("looks kind of risky"))
 	{
 		character->setValidTarget(true);
-		Console::WriteLine("Setting valid target to TRUE");
+		Console::WriteLine("Valid target... blue");
+	}
+
+	if (newLine->Contains("looks like an even fight"))
+	{
+		character->setValidTarget(true);
+		Console::WriteLine("Valid target... even con");
 	}
 
 	if (newLine->Contains("must first select a target for this spell"))
