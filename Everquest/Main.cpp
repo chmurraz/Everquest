@@ -10,16 +10,5 @@ int main()
 
 	//	Run the GUI
 	EverquestForm::Launch();
-	
 
-	// *** ATTEMPTS TO MOVE/RESIZE CONSOLE WINDOW *** //
-
-	//EQform->StartPosition = FormStartPosition::CenterScreen;
-	//EQform->Dock = DockStyle::Left;
-	//MoveWindow(GetConsoleWindow(), 100, 100, Console::WindowWidth, Console::WindowHeight, TRUE);
-	//FreeConsole();
-	//ShowWindow(GetConsoleWindow(), SW_RESTORE);
-	//HWND consoleWindow = GetConsoleWindow();
-	//SetWindowPos(consoleWindow, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-	//System::Console::SetWindowPosition(50, 50);
 }
