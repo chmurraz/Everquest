@@ -3,37 +3,44 @@
 #include "EverquestForm.h"
 
 
-Watcher::Watcher(Character^ character)
+Watcher::Watcher(Character^ character1, Character^ character2, Character^ character3)
 {
-	fileWatcher = gcnew FileSystemWatcher;
+	fileWatcher1 = gcnew FileSystemWatcher;
+	fileWatcher2 = gcnew FileSystemWatcher;
+	fileWatcher3 = gcnew FileSystemWatcher;
 
 	//	Set the path
-	fileWatcher->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
+	fileWatcher1->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
+	fileWatcher2->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
+	fileWatcher3->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
 
 	//	Filter to only watch text files
-	fileWatcher->Filter = "*.txt";
+	fileWatcher1->Filter = "*.txt";
+	fileWatcher2->Filter = "*.txt";
+	fileWatcher3->Filter = "*.txt";
 
 	//	Add event handlers
-	fileWatcher->Changed += gcnew FileSystemEventHandler(Watcher::OnChange);
-	fileWatcher->EnableRaisingEvents = true;
+	fileWatcher1->Changed += gcnew FileSystemEventHandler(Watcher::OnChange1);
+	fileWatcher1->EnableRaisingEvents = true;
 
-	fileName = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
-	fileName += character->getName() + "_" + character->getServerName() + ".txt";
+	fileWatcher2->Changed += gcnew FileSystemEventHandler(Watcher::OnChange2);
+	fileWatcher2->EnableRaisingEvents = true;
+
+	fileWatcher3->Changed += gcnew FileSystemEventHandler(Watcher::OnChange3);
+	fileWatcher3->EnableRaisingEvents = true;
 
 	//	Erase the old log files
-	File::Delete(fileName);
+	File::Delete(character1->getLogFile());
+	File::Delete(character2->getLogFile());
+	File::Delete(character3->getLogFile());
 }
 
-void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
+void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr)
 {
-	//	Scan each line in the batch of lines added to the eqlog.txt file
-	//	Compare each line to the last line read by the character object
-	//	If a line is newer than the last line read by the character object, then launch a character state updater thread
-	//	Repeat until end of stream
-
+	System::String^ newLine;
 	try
 	{
-		sr = File::OpenText(fileName);
+		sr = File::OpenText(character->getLogFile());
 		bool foundLastLineReadInLog = false;
 		while (!sr->EndOfStream)
 		{
@@ -67,5 +74,36 @@ void Watcher::OnChange(Object ^, FileSystemEventArgs ^ e)
 	{
 		throw gcnew Exception("\nAn error occured when opening the log file.  It is likely you have an incorrect character or server name.  The first letter of a character names must be capitalized.  Server names are NOT capitalized (all letters are lower case).", ioex);
 	}
+}
 
+//	Scan each line in the batch of lines added to the eqlog.txt file
+//	Compare each line to the last line read by the character object
+//	If a line is newer than the last line read by the character object, then launch a character state updater thread
+//	Repeat until end of stream
+
+void Watcher::OnChange1(Object^ source, FileSystemEventArgs^ e)
+{
+	FileSystemWatcher^ filewatcher = fileWatcher1;
+	Character^ character = character1;
+	StreamReader^ sr = sr1;
+
+	ScanLines(filewatcher, character, sr);
+}
+
+void Watcher::OnChange2(Object ^ source, FileSystemEventArgs ^ e)
+{
+	FileSystemWatcher^ filewatcher = fileWatcher2;
+	Character^ character = character2;
+	StreamReader^ sr = sr2;
+
+	ScanLines(filewatcher, character, sr);
+}
+
+void Watcher::OnChange3(Object ^ source, FileSystemEventArgs ^ e)
+{
+	FileSystemWatcher^ filewatcher = fileWatcher3;
+	Character^ character = character3;
+	StreamReader^ sr = sr3;
+
+	ScanLines(filewatcher, character, sr);
 }

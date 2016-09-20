@@ -1,14 +1,16 @@
 #include "stdafx.h"
 #include "Character.h"
 
-Character::Character()
+Character::Character(System::String^ nameVal, System::String^ serverNameVal)
 {
 	ip = new INPUT;
 	rest = 0;
 	typeSpeed = 25;
 	lastLineRead = "";
-	name = "";
-	serverName = "";
+	name = nameVal;
+	serverName = serverNameVal;
+	logFile = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
+	logFile += name + "_" + serverName + ".txt";
 }
 
 Character::~Character()
@@ -44,6 +46,7 @@ void Character::PressKeys(System::String^ keys)
 
 System::String ^ Character::getLastLine()
 {
+	/*
 	std::string line;
 	std::ifstream inFile;
 	inFile.open("C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_Xahul_phinigel.txt");
@@ -54,6 +57,8 @@ System::String ^ Character::getLastLine()
 	System::String^ line2 = gcnew String(line.c_str());
 	inFile.close();
 	return line2;
+	*/
+	return lastLineRead;
 }
 
 void Character::setLastLineRead(System::String ^ val)
@@ -74,6 +79,11 @@ System::String ^ Character::getName()
 System::String ^ Character::getServerName()
 {
 	return serverName;
+}
+
+System::String ^ Character::getLogFile()
+{
+	return logFile;
 }
 
 //	Launch actions based on the lastLineRead from the log file

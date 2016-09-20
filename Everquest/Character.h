@@ -21,11 +21,12 @@ private:
 	System::String^ lastLineRead;
 	System::String^ name;
 	System::String^ serverName;
+	System::String^ logFile;
 	HWND CharacterWindowHandle;
 
 	
 public:
-	Character();
+	Character(System::String^ name, System::String^ serverName);
 	~Character();
 	
 	//	Keyboard Sim
@@ -42,5 +43,6 @@ public:
 	System::String^ getLastLineRead();
 	System::String^ getName();
 	System::String^ getServerName();
+	System::String^ getLogFile();
 	void CharacterActions();
 };
