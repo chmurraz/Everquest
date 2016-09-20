@@ -11,22 +11,12 @@
 
 using namespace System::Windows::Forms;
 
-//	This is a wrapper class to contain the Character and Watcher objects
-public ref class CharAndWatcher
-{
-private:
-	Character^ character;
-	Watcher^ logWatcher;
-public:
-	CharAndWatcher(System::String^ cName, System::String^ sName);
-	void RoutineLaunch();
-};
-
 public ref class EverquestForm : public System::Windows::Forms::Form
 {
 private:
 	bool consoleShowing;
 	bool charAndServerLocked;
+
 	static System::String^ charName;
 	static System::String^ serverName;
 

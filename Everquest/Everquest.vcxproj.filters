@@ -33,9 +33,6 @@
     <ClInclude Include="EverquestForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EQGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -51,9 +48,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EverquestForm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EQGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

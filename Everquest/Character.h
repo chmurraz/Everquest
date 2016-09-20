@@ -16,88 +16,31 @@ ref class Character
 {
 private:
 	INPUT* ip;
-	System::String^ keys;
 	DWORD rest;
 	DWORD typeSpeed;
 	System::String^ lastLineRead;
+	System::String^ name;
+	System::String^ serverName;
+	HWND CharacterWindowHandle;
+
 	
 public:
 	Character();
 	~Character();
 	
-	//bool SearchLog(std::string text);			//	deprecated, may remove eventually... commenting out for now
-
 	//	Keyboard Sim
-	void PressKeys(INPUT* ip, System::String^ keys, DWORD rest);
+	void PressKeys(System::String^ keys);
 	void HoldShift();
 	void ReleaseShift();
 	void PressESC();
 	void PressTab();
 	void PressF1();
 
-	//	Cast Spells
-	void Shielding();
-	void LifeSpike();
-	void Snare();
-
-	// Everquest Functions
-	void PetAssist();
-	void InspectBuffs();
-	void TargetSelf();
-
 	//	Mutators and Accessors
-	void setPetInCombat(bool val);
-	bool getPetInCombat();
-	void setExp(bool val);
-	bool getExp();
-	bool getValidTarget();
-	void setValidTarget(bool val);
-	void setRoutineStop(bool val);
-	bool getRoutineStop();
-	void setPetAlive(bool val);
-	bool getPetAlive();
-	void setCastingSpell(bool val);
-	bool getCastingSpell();
-	void setFizzled(bool val);
-	bool getFizzled();
-	void setBeingHit(bool val);
-	bool getBeingHit();
-	void setLowMana(bool val);
-	bool getLowMana();
-	void setShielding(bool val);
-	bool getShielding();
-	System::String^ getPetName();
-	void setPetName();
 	System::String^ getLastLine();
 	void setLastLineRead(System::String^ val);
 	System::String^ getLastLineRead();
-
-	// TBD
-	void FindValidTarget();
-	void Consider();
-	void LogOn();
-	void HideCorpses();
-	
-	void SummonPet();
-	void PetSit();
-	void Sit();
-	void PetAttack();
-	void AssistPet();
-
-	void PetBackOff();
-	void TargetPet();
-
-	//	Log stuff
-	//static void OnLogChange(Object ^ obj, FileSystemEventArgs^ e);
-	//void LogFlags(System::String^ newLine);					//	This is the new log text file logic routine
-	void NecroMain();
-	void NecroNuke();
-	void NecroBeingHit();
-	void NecroGotExp();
-	void NecroCleanUp();
-	void NecroStartUp();
-	void NecroMedBreak();
-	void ClericHealSkillUp();
-	
+	System::String^ getName();
+	System::String^ getServerName();
+	void CharacterActions();
 };
-

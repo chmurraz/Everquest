@@ -125,12 +125,10 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 				//	Char and watcher is a wrapper class that holds the char, the watcher and any buttons it GUI objects
 				//	Used to create a thread delegate object
 
-				CharAndWatcher^ charAndWatcher = gcnew CharAndWatcher(charName, servName);
-
-				ThreadStart^ threadDelegate = gcnew ThreadStart(charAndWatcher, &CharAndWatcher::RoutineLaunch);
-				Thread^ routineThread = gcnew Thread(threadDelegate);
+				//ThreadStart^ threadDelegate = gcnew ThreadStart(charAndWatcher, &CharAndWatcher::RoutineLaunch);
+				//Thread^ routineThread = gcnew Thread(threadDelegate);
 				MoveEQToFront();
-				routineThread->Start();
+				//routineThread->Start();
 			}
 		}
 		else if (button1->Text == "Click to Stop EQ Bot")
@@ -180,27 +178,4 @@ void EverquestForm::MoveEQToFront()
 {
 	SetForegroundWindow(EQHandle);
 	Sleep(2000);
-}
-
-CharAndWatcher::CharAndWatcher(System::String^ cName, System::String^ sName)
-{
-	character = gcnew Character();
-	logWatcher = gcnew Watcher(character, cName, sName);
-}
-
-void CharAndWatcher::RoutineLaunch()
-{
-	//character->NecroStartUp();
-	for (int i = 1; i <= 100; i++)
-	{
-		//logWatcher->setCharacter(character);
-		//Console::WriteLine("Routine started.  Iteration = " + i);
-		//character->NecroMain();
-		//Console::WriteLine("Routine ended.  Iteration = " + i);
-		character->ClericHealSkillUp();
-	}
-	
-	Console::WriteLine("Exiting...");
-	Sleep(3000);
-	Application::Exit();
 }
