@@ -26,7 +26,7 @@ private:
 
 	
 public:
-	Character(System::String^ name, System::String^ serverName);
+	Character();
 	~Character();
 	
 	//	Keyboard Sim
@@ -37,6 +37,9 @@ public:
 	void PressTab();
 	void PressF1();
 
+	//	Logic function
+	void CharacterActions();
+
 	//	Mutators and Accessors
 	System::String^ getLastLine();
 	void setLastLineRead(System::String^ val);
@@ -44,5 +47,6 @@ public:
 	System::String^ getName();
 	System::String^ getServerName();
 	System::String^ getLogFile();
-	void CharacterActions();
+	void setAttributes(System::String^ name, System::String^ server);
+
 };

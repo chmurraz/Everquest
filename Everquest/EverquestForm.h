@@ -17,24 +17,27 @@ private:
 	bool consoleShowing;
 	bool charAndServerLocked;
 
-	static System::String^ charName;
-	static System::String^ serverName;
-
 	Button^ button1;
 	Button^ button2;
 
 	TextBox^ textBox1;
 	TextBox^ textBox2;
+	TextBox^ textBox3;
+	TextBox^ textBox4;
 
 	Label^ label1;
 	Label^ label2;
-	Label^ charNameLabel;
-	Label^ serverNameLabel;
-	HWND EQHandle;
+	Label^ label3;
+	Label^ label4;
+
+	Character^ character1;
+	Character^ character2;
+	Character^ character3;
+
+	Watcher^ watcher;
 
 	void GUI_Click(Object^ sender, EventArgs^ e);
 	void GUI_TextChanged(Object^ sender, EventArgs^ e);
-	void MoveEQToFront();
 
 public:
 	EverquestForm();
@@ -43,8 +46,6 @@ public:
 	void ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text);
 	void TextBoxBuilder(TextBox^ box, int locx, int locy, int tabIndx, System::String^ text);
 	void LabelBuilder(Label^ label, int locx, int locy, int tabIndx, System::String^ text);
-	static System::String^ getCharName();
-	static System::String^ getServerName();
 
 	static void Launch();
 };

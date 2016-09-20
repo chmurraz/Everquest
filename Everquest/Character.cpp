@@ -1,16 +1,15 @@
 #include "stdafx.h"
 #include "Character.h"
 
-Character::Character(System::String^ nameVal, System::String^ serverNameVal)
+Character::Character()
 {
 	ip = new INPUT;
 	rest = 0;
 	typeSpeed = 25;
 	lastLineRead = "";
-	name = nameVal;
-	serverName = serverNameVal;
-	logFile = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
-	logFile += name + "_" + serverName + ".txt";
+	name = "";
+	serverName = "";
+	logFile = "";
 }
 
 Character::~Character()
@@ -84,6 +83,17 @@ System::String ^ Character::getServerName()
 System::String ^ Character::getLogFile()
 {
 	return logFile;
+}
+
+void Character::setAttributes(System::String ^ nameVal, System::String ^ serverVal)
+{
+	name = nameVal;
+	serverName = serverVal;
+	logFile = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
+	logFile += name + "_" + serverName + ".txt";
+
+	//	Erase the old log files
+	File::Delete(logFile);
 }
 
 //	Launch actions based on the lastLineRead from the log file

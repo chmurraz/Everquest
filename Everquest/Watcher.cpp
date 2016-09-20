@@ -3,11 +3,15 @@
 #include "EverquestForm.h"
 
 
-Watcher::Watcher(Character^ character1, Character^ character2, Character^ character3)
+Watcher::Watcher(Character^ char1, Character^ char2, Character^ char3)
 {
 	fileWatcher1 = gcnew FileSystemWatcher;
 	fileWatcher2 = gcnew FileSystemWatcher;
 	fileWatcher3 = gcnew FileSystemWatcher;
+
+	character1 = char1;
+	character2 = char2;
+	character3 = char3;
 
 	//	Set the path
 	fileWatcher1->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
@@ -21,18 +25,29 @@ Watcher::Watcher(Character^ character1, Character^ character2, Character^ charac
 
 	//	Add event handlers
 	fileWatcher1->Changed += gcnew FileSystemEventHandler(Watcher::OnChange1);
-	fileWatcher1->EnableRaisingEvents = true;
+	fileWatcher1->EnableRaisingEvents = false;
 
 	fileWatcher2->Changed += gcnew FileSystemEventHandler(Watcher::OnChange2);
-	fileWatcher2->EnableRaisingEvents = true;
+	fileWatcher2->EnableRaisingEvents = false;
 
 	fileWatcher3->Changed += gcnew FileSystemEventHandler(Watcher::OnChange3);
-	fileWatcher3->EnableRaisingEvents = true;
+	fileWatcher3->EnableRaisingEvents = false;
+}
 
-	//	Erase the old log files
-	File::Delete(character1->getLogFile());
-	File::Delete(character2->getLogFile());
-	File::Delete(character3->getLogFile());
+void Watcher::ToggleEvents()
+{
+	if (fileWatcher1->EnableRaisingEvents)
+	{
+		fileWatcher1->EnableRaisingEvents = false;
+		fileWatcher2->EnableRaisingEvents = false;
+		fileWatcher3->EnableRaisingEvents = false;
+	}
+	else
+	{
+		fileWatcher1->EnableRaisingEvents = true;
+		fileWatcher2->EnableRaisingEvents = true;
+		fileWatcher3->EnableRaisingEvents = true;
+	}
 }
 
 void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr)

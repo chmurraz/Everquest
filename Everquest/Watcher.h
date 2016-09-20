@@ -34,5 +34,6 @@ private:
 public:
 	//[PermissionSet(SecurityAction::Demand,Name="FullTrust")]
 
-	Watcher(Character^ character1, Character^ character2, Character^ character3);
+	Watcher(Character^ char1, Character^ char2, Character^ char3);
+	void ToggleEvents();
 };

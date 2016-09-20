@@ -57,48 +57,45 @@ void EverquestForm::LabelBuilder(Label ^ label, int locx, int locy, int tabIndx,
 	this->Controls->Add(label);
 }
 
-System::String ^ EverquestForm::getCharName()
-{
-	return charName;
-}
-
-System::String ^ EverquestForm::getServerName()
-{
-	return serverName;
-}
-
 void EverquestForm::BuildGUIObjects()
 {
 	button1 = gcnew Button();
 	button2 = gcnew Button();
 	textBox1 = gcnew TextBox();
 	textBox2 = gcnew TextBox();
+	textBox3 = gcnew TextBox();
+	textBox4 = gcnew TextBox();
 	label1 = gcnew Label();
 	label2 = gcnew Label();
-	charNameLabel = gcnew Label();
-	serverNameLabel = gcnew Label();
+	label3 = gcnew Label();
+	label4 = gcnew Label();
 
 	ButtonBuilder(button1, 10, 10, 0, "Click to Start EQ Bot");
 	ButtonBuilder(button2, 10, 40, 1, "Show/Hide Console Window");
-	TextBoxBuilder(textBox1, 325, 10, 2, "Type Here...");
-	TextBoxBuilder(textBox2, 325, 40, 3, "Type Here...");
-	LabelBuilder(label1, 200, 10, 4, "Character Name -->:");
-	LabelBuilder(label2, 200, 40, 5, "Server Name ----->:");
-	LabelBuilder(charNameLabel, 600, 10, 6, "Character Name Set to: N/A");
-	LabelBuilder(serverNameLabel, 600, 40, 7, "Character Name Set to: N/A");
+	TextBoxBuilder(textBox1, 325, 10, 2, "Izzuum");
+	TextBoxBuilder(textBox2, 325, 40, 3, "Khaed");
+	TextBoxBuilder(textBox3, 325, 70, 4, "Ravek");
+	TextBoxBuilder(textBox4, 325, 110, 5, "firiona");
+	LabelBuilder(label1, 200, 10, 6, "Character One -->:");
+	LabelBuilder(label2, 200, 40, 7, "Character Two ----->:");
+	LabelBuilder(label3, 200, 70, 8, "Character Three --->");
+	LabelBuilder(label4, 200, 110, 9, "Server Name --->");
 }
 
 void EverquestForm::BuildPrivate()
 {
-	Text = "EQ Botter Thingy!";
+	Text = "EQ Botter Thingy v2!";
 	consoleShowing = false;
 	Size = System::Drawing::Size(900, 200);
-	charName = "";
-	serverName = "";
 	charAndServerLocked = false;
 
+	character1 = gcnew Character();
+	character2 = gcnew Character();
+	character3 = gcnew Character();
+
+	watcher = gcnew Watcher(character1, character2, character3);
+
 	//	Note change Properties > General > Character Set to "Use Multi-Byte Character Set" so that FindWindow() works properly.
-	EQHandle = FindWindowA(NULL, "Everquest");
 }
 
 void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
@@ -108,28 +105,20 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 	{
 		if (button1->Text == "Click to Start EQ Bot")
 		{
-			// Verify that Everquest is a running process.
-			if (EQHandle == NULL)
-			{
-				MessageBox::Show("Everquest is not running.");
-			}
-			else
-			{
-				button1->BackColor = System::Drawing::Color::Red;
-				button1->Text = "Click to Stop EQ Bot";
-				this->Refresh();
+			button1->BackColor = System::Drawing::Color::Red;
+			button1->Text = "Click to Stop EQ Bot";
+			this->Refresh();
 
-				System::String^ charName = textBox1->Text;
-				System::String^ servName = textBox2->Text;
+			character1->setAttributes(textBox1->Text, textBox4->Text);
+			character2->setAttributes(textBox2->Text, textBox4->Text);
+			character3->setAttributes(textBox3->Text, textBox4->Text);
 
-				//	Char and watcher is a wrapper class that holds the char, the watcher and any buttons it GUI objects
-				//	Used to create a thread delegate object
+			//	Char and watcher is a wrapper class that holds the char, the watcher and any buttons it GUI objects
+			//	Used to create a thread delegate object
 
-				//ThreadStart^ threadDelegate = gcnew ThreadStart(charAndWatcher, &CharAndWatcher::RoutineLaunch);
-				//Thread^ routineThread = gcnew Thread(threadDelegate);
-				MoveEQToFront();
-				//routineThread->Start();
-			}
+			//ThreadStart^ threadDelegate = gcnew ThreadStart(charAndWatcher, &CharAndWatcher::RoutineLaunch);
+			//Thread^ routineThread = gcnew Thread(threadDelegate);
+			//routineThread->Start();
 		}
 		else if (button1->Text == "Click to Stop EQ Bot")
 		{
@@ -137,6 +126,7 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 			button1->Text = "Click to Start EQ Bot";
 			this->Refresh();
 		}
+		watcher->ToggleEvents();
 	}
 
 	if (sender == button2)
@@ -162,20 +152,14 @@ void EverquestForm::GUI_TextChanged(Object ^ sender, EventArgs ^ e)
 {
 	if (sender == textBox1)
 	{
-		charName = textBox1->Text;
+		//charName = textBox1->Text;
 	}
 
 	if (sender == textBox2)
 	{
-		serverName = textBox2->Text;
+		//serverName = textBox2->Text;
 	}
-	charNameLabel->Text = "Character Name Set to: " + textBox1->Text;
-	serverNameLabel->Text = "Server Name Set to: " + textBox2->Text;
+	//charNameLabel->Text = "Character Name Set to: " + textBox1->Text;
+	//serverNameLabel->Text = "Server Name Set to: " + textBox2->Text;
 	this->Refresh();
-}
-
-void EverquestForm::MoveEQToFront()
-{
-	SetForegroundWindow(EQHandle);
-	Sleep(2000);
 }
