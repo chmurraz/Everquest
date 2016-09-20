@@ -18,11 +18,6 @@ Watcher::Watcher(Character^ char1, Character^ char2, Character^ char3)
 	fileWatcher2->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
 	fileWatcher3->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
 
-	//	Filter to only watch text files
-	fileWatcher1->Filter = "*.txt";
-	fileWatcher2->Filter = "*.txt";
-	fileWatcher3->Filter = "*.txt";
-
 	//	Add event handlers
 	fileWatcher1->Changed += gcnew FileSystemEventHandler(Watcher::OnChange1);
 	fileWatcher1->EnableRaisingEvents = false;
@@ -48,6 +43,21 @@ void Watcher::ToggleEvents()
 		fileWatcher2->EnableRaisingEvents = true;
 		fileWatcher3->EnableRaisingEvents = true;
 	}
+}
+
+FileSystemWatcher ^ Watcher::getFileWatcher1()
+{
+	return fileWatcher1;
+}
+
+FileSystemWatcher ^ Watcher::getFileWatcher2()
+{
+	return fileWatcher2;
+}
+
+FileSystemWatcher ^ Watcher::getFileWatcher3()
+{
+	return fileWatcher3;
 }
 
 void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr)

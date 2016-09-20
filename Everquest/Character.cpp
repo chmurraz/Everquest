@@ -99,7 +99,7 @@ void Character::setAttributes(System::String ^ nameVal, System::String ^ serverV
 //	Launch actions based on the lastLineRead from the log file
 void Character::CharacterActions()
 {
-	throw gcnew System::NotImplementedException();
+	Console::WriteLine(lastLineRead);
 }
 
 void Character::PressESC()

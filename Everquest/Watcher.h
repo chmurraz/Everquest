@@ -36,4 +36,7 @@ public:
 
 	Watcher(Character^ char1, Character^ char2, Character^ char3);
 	void ToggleEvents();
+	FileSystemWatcher^ getFileWatcher1();
+	FileSystemWatcher^ getFileWatcher2();
+	FileSystemWatcher^ getFileWatcher3();
 };
