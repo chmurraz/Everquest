@@ -91,6 +91,8 @@ void Character::setAttributes(System::String ^ nameVal, System::String ^ serverV
 	serverName = serverVal;
 	logFile = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
 	logFile += name + "_" + serverName + ".txt";
+	CharacterWindowHandle = FindWindow("_EverQuestwndclass", "EverQuest");
+	SetWindowText(CharacterWindowHandle, name->);
 
 	//	Erase the old log files
 	File::Delete(logFile);

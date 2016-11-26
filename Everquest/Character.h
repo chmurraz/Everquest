@@ -11,6 +11,7 @@ using namespace System;
 using namespace System::IO;
 using namespace System::Windows::Forms;
 using namespace System::Security::Permissions;
+using namespace System::Runtime::InteropServices;
 
 ref class Character
 {
@@ -23,7 +24,6 @@ private:
 	System::String^ serverName;
 	System::String^ logFile;
 	HWND CharacterWindowHandle;
-
 	
 public:
 	Character();
@@ -48,5 +48,8 @@ public:
 	System::String^ getServerName();
 	System::String^ getLogFile();
 	void setAttributes(System::String^ name, System::String^ server);
+	
+	[DllImport("user32.dll", CharSet = CharSet::Auto)]
+	static void SetWindowText(HWND charHWND, System::String^ winName);
 
 };

@@ -65,28 +65,44 @@ void EverquestForm::BuildGUIObjects()
 	textBox2 = gcnew TextBox();
 	textBox3 = gcnew TextBox();
 	textBox4 = gcnew TextBox();
+	textBox5 = gcnew TextBox();
+	textBox6 = gcnew TextBox();
+	textBox7 = gcnew TextBox();
 	label1 = gcnew Label();
 	label2 = gcnew Label();
 	label3 = gcnew Label();
 	label4 = gcnew Label();
+	label5 = gcnew Label();
+	label6 = gcnew Label();
+	label7 = gcnew Label();
 
 	ButtonBuilder(button1, 10, 10, 0, "Click to Start EQ Bot");
 	ButtonBuilder(button2, 10, 40, 1, "Show/Hide Console Window");
+
+	LabelBuilder(label1, 200, 10, 9, "Character One ----->:");
+	LabelBuilder(label2, 200, 40, 10, "Character Two ----->:");
+	LabelBuilder(label3, 200, 70, 11, "Character Three --->:");
+	LabelBuilder(label4, 200, 110, 12, "Server Name --->:");
+
 	TextBoxBuilder(textBox1, 325, 10, 2, "Izzuum");
 	TextBoxBuilder(textBox2, 325, 40, 3, "Khaed");
 	TextBoxBuilder(textBox3, 325, 70, 4, "Ravek");
 	TextBoxBuilder(textBox4, 325, 110, 5, "firiona");
-	LabelBuilder(label1, 200, 10, 6, "Character One -->:");
-	LabelBuilder(label2, 200, 40, 7, "Character Two ----->:");
-	LabelBuilder(label3, 200, 70, 8, "Character Three --->");
-	LabelBuilder(label4, 200, 110, 9, "Server Name --->");
+
+	LabelBuilder(label5, 600, 10, 9, "HWND:");
+	LabelBuilder(label6, 600, 40, 10, "HWND:");
+	LabelBuilder(label7, 600, 70, 11, "HWND:");
+
+	TextBoxBuilder(textBox5, 650, 10, 6, "a");
+	TextBoxBuilder(textBox6, 650, 40, 7, "b");
+	TextBoxBuilder(textBox7, 650, 70, 8, "c");
 }
 
 void EverquestForm::BuildPrivate()
 {
 	Text = "EQ Botter Thingy v2!";
 	consoleShowing = false;
-	Size = System::Drawing::Size(900, 200);
+	Size = System::Drawing::Size(1200, 200);
 	charAndServerLocked = false;
 
 	character1 = gcnew Character();

@@ -24,11 +24,17 @@ private:
 	TextBox^ textBox2;
 	TextBox^ textBox3;
 	TextBox^ textBox4;
+	TextBox^ textBox5;
+	TextBox^ textBox6;
+	TextBox^ textBox7;
 
 	Label^ label1;
 	Label^ label2;
 	Label^ label3;
 	Label^ label4;
+	Label^ label5;
+	Label^ label6;
+	Label^ label7;
 
 	Character^ character1;
 	Character^ character2;
