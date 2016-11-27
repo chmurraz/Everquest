@@ -136,16 +136,14 @@ void Watcher::OnChange3(Object ^ source, FileSystemEventArgs ^ e)
 
 void Watcher::Actions(Character^ character, System::String^ newLine)
 {
-	if (newLine->Contains("Assist me!"))
-	{
-		character->BringWindowToFront();
-		character->PressKeys("/assist Izzuum", true);
-		if (character->getName() == "Ravek")
-			character->PressKeys("/pet attack", true);
-		character1->BringWindowToFront();
-	}
 	if (character->getName() == "Khaed")
 	{
+		if(newLine->Contains("Assist me Khaed!"))
+		{
+			character->BringWindowToFront();
+			character->PressKeys("/assist Izzuum", true);
+			character1->BringWindowToFront();
+		}
 		if (newLine->Contains("Khaed, play your group buffs please"))
 		{
 			character->BringWindowToFront();
@@ -212,15 +210,22 @@ void Watcher::Actions(Character^ character, System::String^ newLine)
 	}
 	if (character->getName() == "Ravek")
 	{
+		if (newLine->Contains("Assist me Ravek!"))
+		{
+			character->BringWindowToFront();
+			character->PressKeys("/assist Izzuum", true);
+			character->PressKeys("/pet attack", true);
+			character1->BringWindowToFront();
+		}
 		if (newLine->Contains("Ravek, flameskin please"))
 		{
 			character->BringWindowToFront();
 			character->PressKeys("/cast 11", true);
 			character->PressKeys("/g ", false);
 			character->HoldShift();
-			character->PressKeys("T ", false);
+			character->PressKeys("t", false);
 			character->ReleaseShift();
-			character->PressKeys("he group has been imolated", true);
+			character->PressKeys("he group has been immolated", true);
 			character1->BringWindowToFront();
 		}
 	}
