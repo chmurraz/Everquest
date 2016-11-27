@@ -50,15 +50,15 @@ FileSystemWatcher ^ Watcher::getFileWatcher1()
 	return fileWatcher1;
 }
 
-FileSystemWatcher ^ Watcher::getFileWatcher2()
-{
-	return fileWatcher2;
-}
+//FileSystemWatcher ^ Watcher::getFileWatcher2()
+//{
+//	return fileWatcher2;
+//}
 
-FileSystemWatcher ^ Watcher::getFileWatcher3()
-{
-	return fileWatcher3;
-}
+//FileSystemWatcher ^ Watcher::getFileWatcher3()
+//{
+//	return fileWatcher3;
+//}
 
 void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr)
 {

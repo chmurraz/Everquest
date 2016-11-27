@@ -15,8 +15,8 @@ public ref class Watcher
 {
 private:
 	static void OnChange1(Object^ source, FileSystemEventArgs^ e);
-	static void OnChange2(Object^ source, FileSystemEventArgs^ e);
-	static void OnChange3(Object^ source, FileSystemEventArgs^ e);
+	//static void OnChange2(Object^ source, FileSystemEventArgs^ e);
+	//static void OnChange3(Object^ source, FileSystemEventArgs^ e);
 	static FileSystemWatcher^ fileWatcher1;
 	static FileSystemWatcher^ fileWatcher2;
 	static FileSystemWatcher^ fileWatcher3;
@@ -38,6 +38,6 @@ public:
 	Watcher(Character^ char1, Character^ char2, Character^ char3);
 	void ToggleEvents();
 	FileSystemWatcher^ getFileWatcher1();
-	FileSystemWatcher^ getFileWatcher2();
-	FileSystemWatcher^ getFileWatcher3();
+	//FileSystemWatcher^ getFileWatcher2();
+	//FileSystemWatcher^ getFileWatcher3();
 };
