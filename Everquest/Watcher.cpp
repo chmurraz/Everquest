@@ -141,7 +141,7 @@ void Watcher::Actions(Character^ character, System::String^ newLine)
 		if(newLine->Contains("Assist me Khaed!"))
 		{
 			character->BringWindowToFront();
-			character->PressKeys("/assist Izzuum", true);
+			character->PressKeys("/assist izzuum", true);
 			character1->BringWindowToFront();
 		}
 		if (newLine->Contains("Khaed, play your group buffs please"))
@@ -213,7 +213,7 @@ void Watcher::Actions(Character^ character, System::String^ newLine)
 		if (newLine->Contains("Assist me Ravek!"))
 		{
 			character->BringWindowToFront();
-			character->PressKeys("/assist Izzuum", true);
+			character->PressKeys("/assist izzuum", true);
 			character->PressKeys("/pet attack", true);
 			character1->BringWindowToFront();
 		}
