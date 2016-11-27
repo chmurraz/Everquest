@@ -6,8 +6,8 @@
 Watcher::Watcher(Character^ char1, Character^ char2, Character^ char3)
 {
 	fileWatcher1 = gcnew FileSystemWatcher;
-	fileWatcher2 = gcnew FileSystemWatcher;
-	fileWatcher3 = gcnew FileSystemWatcher;
+	//fileWatcher2 = gcnew FileSystemWatcher;
+	//fileWatcher3 = gcnew FileSystemWatcher;
 
 	character1 = char1;
 	character2 = char2;
@@ -15,18 +15,18 @@ Watcher::Watcher(Character^ char1, Character^ char2, Character^ char3)
 
 	//	Set the path
 	fileWatcher1->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
-	fileWatcher2->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
-	fileWatcher3->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
+	//fileWatcher2->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
+	//fileWatcher3->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
 
 	//	Add event handlers
 	fileWatcher1->Changed += gcnew FileSystemEventHandler(Watcher::OnChange1);
 	fileWatcher1->EnableRaisingEvents = false;
 
-	fileWatcher2->Changed += gcnew FileSystemEventHandler(Watcher::OnChange2);
-	fileWatcher2->EnableRaisingEvents = false;
+	//fileWatcher2->Changed += gcnew FileSystemEventHandler(Watcher::OnChange2);
+	//fileWatcher2->EnableRaisingEvents = false;
 
-	fileWatcher3->Changed += gcnew FileSystemEventHandler(Watcher::OnChange3);
-	fileWatcher3->EnableRaisingEvents = false;
+	//fileWatcher3->Changed += gcnew FileSystemEventHandler(Watcher::OnChange3);
+	//fileWatcher3->EnableRaisingEvents = false;
 }
 
 void Watcher::ToggleEvents()
@@ -34,14 +34,14 @@ void Watcher::ToggleEvents()
 	if (fileWatcher1->EnableRaisingEvents)
 	{
 		fileWatcher1->EnableRaisingEvents = false;
-		fileWatcher2->EnableRaisingEvents = false;
-		fileWatcher3->EnableRaisingEvents = false;
+		//fileWatcher2->EnableRaisingEvents = false;
+		//fileWatcher3->EnableRaisingEvents = false;
 	}
 	else
 	{
 		fileWatcher1->EnableRaisingEvents = true;
-		fileWatcher2->EnableRaisingEvents = true;
-		fileWatcher3->EnableRaisingEvents = true;
+		//fileWatcher2->EnableRaisingEvents = true;
+		//fileWatcher3->EnableRaisingEvents = true;
 	}
 }
 
@@ -94,7 +94,10 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 
 		//	Close the stream reader
 		sr->Close();
-		Actions(character, newLine);
+		if (newLine->Contains("Khaed"))
+			Actions(character2, newLine);
+		if (newLine->Contains("Ravek"))
+			Actions(character3, newLine);
 	}
 	catch (Exception^ ioex)
 	{
@@ -116,23 +119,23 @@ void Watcher::OnChange1(Object^ source, FileSystemEventArgs^ e)
 	ScanLines(filewatcher, character, sr);
 }
 
-void Watcher::OnChange2(Object ^ source, FileSystemEventArgs ^ e)
-{
-	FileSystemWatcher^ filewatcher = fileWatcher2;
-	Character^ character = character2;
-	StreamReader^ sr = sr2;
+//void Watcher::OnChange2(Object ^ source, FileSystemEventArgs ^ e)
+//{
+//	FileSystemWatcher^ filewatcher = fileWatcher2;
+//	Character^ character = character2;
+//	StreamReader^ sr = sr2;
+//
+//	ScanLines(filewatcher, character, sr);
+//}
 
-	ScanLines(filewatcher, character, sr);
-}
-
-void Watcher::OnChange3(Object ^ source, FileSystemEventArgs ^ e)
-{
-	FileSystemWatcher^ filewatcher = fileWatcher3;
-	Character^ character = character3;
-	StreamReader^ sr = sr3;
-
-	ScanLines(filewatcher, character, sr);
-}
+//void Watcher::OnChange3(Object ^ source, FileSystemEventArgs ^ e)
+//{
+//	FileSystemWatcher^ filewatcher = fileWatcher3;
+//	Character^ character = character3;
+//	StreamReader^ sr = sr3;
+//
+//	ScanLines(filewatcher, character, sr);
+//}
 
 void Watcher::Actions(Character^ character, System::String^ newLine)
 {
