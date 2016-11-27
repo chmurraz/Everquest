@@ -19,6 +19,8 @@ private:
 
 	Button^ button1;
 	Button^ button2;
+	Button^ button3;
+	Button^ button4;
 
 	TextBox^ textBox1;
 	TextBox^ textBox2;
@@ -49,7 +51,7 @@ public:
 	EverquestForm();
 	void BuildGUIObjects();
 	void BuildPrivate();
-	void ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text);
+	void ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text, System::String^ color);
 	void TextBoxBuilder(TextBox^ box, int locx, int locy, int tabIndx, System::String^ text);
 	void LabelBuilder(Label^ label, int locx, int locy, int tabIndx, System::String^ text);
 

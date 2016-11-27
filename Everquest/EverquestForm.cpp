@@ -25,13 +25,22 @@ EverquestForm::EverquestForm()
 }
 
 //	This uses a typedef for a function pointer.  This is declared in EverquestForm.h
-void EverquestForm::ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text)
+void EverquestForm::ButtonBuilder(Button^ button, int locx, int locy, int tabIndx, System::String^ text, System::String^ color)
 {
 	button->Location = Point(locx, locy);
 	button->TabIndex = tabIndx;
 	button->Text = text;
 	button->AutoSize = true;
 	button->Click += gcnew EventHandler(this, &EverquestForm::GUI_Click);
+	if (color == "Red")
+	{
+		button->BackColor = System::Drawing::Color::Red;
+	}
+	if (color == "LightGreen")
+	{
+		button->BackColor = System::Drawing::Color::LightGreen;
+	}
+
 	this->Controls->Add(button);
 }
 
@@ -61,6 +70,8 @@ void EverquestForm::BuildGUIObjects()
 {
 	button1 = gcnew Button();
 	button2 = gcnew Button();
+	button3 = gcnew Button();
+	button4 = gcnew Button();
 	textBox1 = gcnew TextBox();
 	textBox2 = gcnew TextBox();
 	textBox3 = gcnew TextBox();
@@ -76,8 +87,10 @@ void EverquestForm::BuildGUIObjects()
 	label6 = gcnew Label();
 	label7 = gcnew Label();
 
-	ButtonBuilder(button1, 10, 10, 0, "Click to Start EQ Bot");
-	ButtonBuilder(button2, 10, 40, 1, "Show/Hide Console Window");
+	ButtonBuilder(button1, 10, 10, 0, "Click to Start EQ Bot", "LightGreen");
+	ButtonBuilder(button2, 10, 40, 1, "Show/Hide Console Window", "");
+	ButtonBuilder(button3, 10, 70, 2, "Find EQ Character Window", "");
+	ButtonBuilder(button4, 10, 100, 3, "Reset EQ Windows", "");
 
 	LabelBuilder(label1, 200, 10, 9, "Character One ----->:");
 	LabelBuilder(label2, 200, 40, 10, "Character Two ----->:");
@@ -93,9 +106,9 @@ void EverquestForm::BuildGUIObjects()
 	LabelBuilder(label6, 600, 40, 10, "HWND:");
 	LabelBuilder(label7, 600, 70, 11, "HWND:");
 
-	TextBoxBuilder(textBox5, 650, 10, 6, "a");
-	TextBoxBuilder(textBox6, 650, 40, 7, "b");
-	TextBoxBuilder(textBox7, 650, 70, 8, "c");
+	TextBoxBuilder(textBox5, 650, 10, 6, "unknown");
+	TextBoxBuilder(textBox6, 650, 40, 7, "unknown");
+	TextBoxBuilder(textBox7, 650, 70, 8, "unknown");
 }
 
 void EverquestForm::BuildPrivate()
@@ -125,9 +138,9 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 			button1->Text = "Click to Stop EQ Bot";
 			this->Refresh();
 
-			character1->setAttributes(textBox1->Text, textBox4->Text);
-			character2->setAttributes(textBox2->Text, textBox4->Text);
-			character3->setAttributes(textBox3->Text, textBox4->Text);
+			//character1->setAttributes(textBox1->Text, textBox4->Text);
+			//character2->setAttributes(textBox2->Text, textBox4->Text);
+			//character3->setAttributes(textBox3->Text, textBox4->Text);
 
 			//	Add filters to the filewatchers
 			//watcher->getFileWatcher1()->Filter = character1->getLogFile();
@@ -147,7 +160,7 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 		}
 		else if (button1->Text == "Click to Stop EQ Bot")
 		{
-			button1->BackColor = System::Drawing::Color::LightGreen;
+			button1->BackColor = System::Drawing::Color::Green;
 			button1->Text = "Click to Start EQ Bot";
 			this->Refresh();
 		}
@@ -161,6 +174,48 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 			ShowWindow(GetConsoleWindow(), 1);
 		if (!consoleShowing)
 			ShowWindow(GetConsoleWindow(), 0);
+	}
+
+	if (sender == button3)
+	{
+		if (textBox5->Text == "unknown" && FindWindow("_EverQuestwndclass", "EverQuest") != NULL)
+		{
+			character1->setAttributes(textBox1->Text, textBox4->Text);
+			textBox5->Text = character1->getName();
+			SetWindowText(character1->getCharacterWindowHandle(), "Izzuum");
+		}
+
+		if (textBox6->Text == "unknown" && FindWindow("_EverQuestwndclass", "EverQuest") != NULL)
+		{
+			character2->setAttributes(textBox2->Text, textBox4->Text);
+			textBox6->Text = character2->getName();
+			SetWindowText(character2->getCharacterWindowHandle(), "Khaed");
+		}
+
+		if (textBox7->Text == "unknown" && FindWindow("_EverQuestwndclass", "EverQuest") != NULL)
+		{
+			character3->setAttributes(textBox3->Text, textBox4->Text);
+			textBox7->Text = character3->getName();
+			SetWindowText(character3->getCharacterWindowHandle(), "Ravek");
+		}
+		
+	}
+
+	if (sender == button4)
+	{
+		HWND one, two, three;
+		one = FindWindow("_EverQuestwndclass", "Izzuum");
+		two = FindWindow("_EverQuestwndclass", "Khaed");
+		three = FindWindow("_EverQuestwndclass", "Ravek");
+		if (one != NULL)
+			SetWindowText(one, "EverQuest");
+		if (two != NULL)
+			SetWindowText(two, "EverQuest");
+		if (three != NULL)
+			SetWindowText(three, "EverQuest");
+		textBox5->Text = "unknown";
+		textBox6->Text = "unknown";
+		textBox7->Text = "unknown";
 	}
 	if (sender == textBox1 )
 	{

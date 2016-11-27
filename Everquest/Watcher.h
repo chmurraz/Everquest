@@ -30,6 +30,7 @@ private:
 	static StreamReader^ sr3;
 
 	static void ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr);
+	static void Actions();
 
 public:
 	//[PermissionSet(SecurityAction::Demand,Name="FullTrust")]

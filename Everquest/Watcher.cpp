@@ -132,3 +132,8 @@ void Watcher::OnChange3(Object ^ source, FileSystemEventArgs ^ e)
 
 	ScanLines(filewatcher, character, sr);
 }
+
+void Watcher::Actions()
+{
+	throw gcnew System::NotImplementedException();
+}

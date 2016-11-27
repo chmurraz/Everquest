@@ -47,9 +47,10 @@ public:
 	System::String^ getName();
 	System::String^ getServerName();
 	System::String^ getLogFile();
+	HWND getCharacterWindowHandle();
 	void setAttributes(System::String^ name, System::String^ server);
 	
-	[DllImport("user32.dll", CharSet = CharSet::Auto)]
-	static void SetWindowText(HWND charHWND, System::String^ winName);
+	//[DllImport("user32.dll", CharSet = CharSet::Auto)]
+	//static void SetWindowText(HWND charHWND, System::String^ winName);
 
 };
