@@ -5,7 +5,7 @@ Character::Character()
 {
 	ip = new INPUT;
 	rest = 0;
-	typeSpeed = 25;
+	typeSpeed = 15;
 	lastLineRead = "";
 	name = "";
 	serverName = "";
@@ -19,7 +19,7 @@ Character::~Character()
 	ip = NULL;
 }
 
-void Character::PressKeys(System::String^ keys)
+void Character::PressKeys(System::String^ keys, System::Boolean enterBool)
 {
 	for (unsigned i = 0; i < keys->Length; i++)
 	{
@@ -41,6 +41,8 @@ void Character::PressKeys(System::String^ keys)
 		// Use this sleep line to debug each character one at a time in EQ
 		Sleep(typeSpeed);
 	}
+	if (enterBool)
+		PressEnter();
 	Sleep(rest);
 }
 
@@ -125,6 +127,22 @@ void Character::PressESC()
 	SendInput(1, ip, sizeof(INPUT));
 }
 
+void Character::PressEnter()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_RETURN, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+	Sleep(100);
+}
+
 void Character::PressTab()
 {
 	ip->type = INPUT_KEYBOARD;
@@ -153,6 +171,162 @@ void Character::PressF1()
 	SendInput(1, ip, sizeof(INPUT));
 	ip->ki.dwFlags = KEYEVENTF_KEYUP;
 	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press1()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD1, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press2()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD2, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press3()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD3, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press4()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD4, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press5()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD5, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press6()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(0x36, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press7()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD7, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press8()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD8, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press9()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD9, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::Press0()
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD0, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::BringWindowToFront()
+{
+	SetForegroundWindow(CharacterWindowHandle);
+	Sleep(150);
 }
 
 void Character::HoldShift()

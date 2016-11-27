@@ -30,12 +30,26 @@ public:
 	~Character();
 	
 	//	Keyboard Sim
-	void PressKeys(System::String^ keys);
+	void PressKeys(System::String^ keys, System::Boolean enterBool);
 	void HoldShift();
 	void ReleaseShift();
 	void PressESC();
+	void PressEnter();
 	void PressTab();
 	void PressF1();
+	void Press1();
+	void Press2();
+	void Press3();
+	void Press4();
+	void Press5();
+	void Press6();
+	void Press7();
+	void Press8();
+	void Press9();
+	void Press0();
+
+	//	Windows functions
+	void BringWindowToFront();
 
 	//	Logic function
 	void CharacterActions();
