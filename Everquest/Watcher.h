@@ -32,6 +32,11 @@ private:
 	static void ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr);
 	static void Actions(Character^ character, System::String^ newLine);
 
+	//	Automatic botting variables
+	bool validTarget;
+	bool inRange;
+	bool gotExpRecently;
+
 public:
 	//[PermissionSet(SecurityAction::Demand,Name="FullTrust")]
 

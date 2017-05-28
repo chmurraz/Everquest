@@ -9,11 +9,14 @@
 //#using <System.dll>
 //#include <cstdio>
 
+
 using namespace System::Windows::Forms;
 
 public ref class EverquestForm : public System::Windows::Forms::Form
 {
 private:
+
+	static StreamReader^ characterServerList;
 	bool consoleShowing;
 	bool charAndServerLocked;
 

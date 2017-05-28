@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EverquestForm.h"
+#include <msclr\marshal.h>
 
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
@@ -97,10 +98,10 @@ void EverquestForm::BuildGUIObjects()
 	LabelBuilder(label3, 200, 70, 11, "Character Three --->:");
 	LabelBuilder(label4, 200, 110, 12, "Server Name --->:");
 
-	TextBoxBuilder(textBox1, 325, 10, 2, "Izzuum");
-	TextBoxBuilder(textBox2, 325, 40, 3, "Khaed");
-	TextBoxBuilder(textBox3, 325, 70, 4, "Ravek");
-	TextBoxBuilder(textBox4, 325, 110, 5, "firiona");
+	TextBoxBuilder(textBox1, 325, 10, 2, character1->getName());
+	TextBoxBuilder(textBox2, 325, 40, 3, character2->getName());
+	TextBoxBuilder(textBox3, 325, 70, 4, character3->getName());
+	TextBoxBuilder(textBox4, 325, 110, 5, character1->getServerName());
 
 	LabelBuilder(label5, 600, 10, 9, "HWND:");
 	LabelBuilder(label6, 600, 40, 10, "HWND:");
@@ -123,12 +124,38 @@ void EverquestForm::BuildPrivate()
 	character3 = gcnew Character();
 
 	watcher = gcnew Watcher(character1, character2, character3);
+	characterServerList = File::OpenText("C:\\Users\\Chris\\Documents\\Visual Studio 2015\\Projects\\Everquest\\Debug\\characterServerList.txt");
+
+	System::String^ newLine;
+	int characterCount = 0;
+	while (!characterServerList->EndOfStream)
+	{
+		characterCount++;
+		newLine = characterServerList->ReadLine();
+		if (characterCount == 1)
+		{
+			character1->setServer(newLine);
+			character2->setServer(newLine);
+			character3->setServer(newLine);
+		}
+		if (characterCount == 2)
+			character1->setName(newLine);
+		if (characterCount == 3)
+			character2->setName(newLine);
+		if (characterCount == 4)
+			character3->setName(newLine);
+
+	}
+
+	//	Close the stream reader
+	characterServerList->Close();
 
 	//	Note change Properties > General > Character Set to "Use Multi-Byte Character Set" so that FindWindow() works properly.
 }
 
 void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 {
+	msclr::interop::marshal_context mc;
 	//System::Windows::Forms::Button^ senderAsButton = (System::Windows::Forms::Button^)sender;
 	if (sender == button1 && button1->Text)
 	{
@@ -178,35 +205,44 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 
 	if (sender == button3)
 	{
+		if (String::Compare(textBox5->Text, "unknown"))
+		{
+			character1->setName(textBox1->Text);
+			character1->setServer(textBox4->Text);
+			textBox5->Text = character1->getName();
+			SetWindowText(character1->getCharacterWindowHandle(), mc.marshal_as<LPCSTR>(textBox1->Text));
+		}
 		if (textBox5->Text == "unknown" && FindWindow("_EverQuestwndclass", "EverQuest") != NULL)
 		{
-			character1->setAttributes(textBox1->Text, textBox4->Text);
+			character1->setName(textBox1->Text);
+			character1->setServer(textBox4->Text);
 			textBox5->Text = character1->getName();
-			SetWindowText(character1->getCharacterWindowHandle(), "Izzuum");
+			SetWindowText(character1->getCharacterWindowHandle(), mc.marshal_as<LPCSTR>(textBox1->Text));
 		}
 
 		if (textBox6->Text == "unknown" && FindWindow("_EverQuestwndclass", "EverQuest") != NULL)
 		{
-			character2->setAttributes(textBox2->Text, textBox4->Text);
+			character2->setName(textBox2->Text);
+			character2->setServer(textBox4->Text);
 			textBox6->Text = character2->getName();
 			SetWindowText(character2->getCharacterWindowHandle(), "Khaed");
 		}
 
 		if (textBox7->Text == "unknown" && FindWindow("_EverQuestwndclass", "EverQuest") != NULL)
 		{
-			character3->setAttributes(textBox3->Text, textBox4->Text);
+			character1->setName(textBox3->Text);
+			character1->setServer(textBox4->Text);
 			textBox7->Text = character3->getName();
 			SetWindowText(character3->getCharacterWindowHandle(), "Ravek");
 		}
-		
 	}
 
 	if (sender == button4)
 	{
 		HWND one, two, three;
-		one = FindWindow("_EverQuestwndclass", "Izzuum");
-		two = FindWindow("_EverQuestwndclass", "Khaed");
-		three = FindWindow("_EverQuestwndclass", "Ravek");
+		one = FindWindow("_EverQuestwndclass", mc.marshal_as<LPCSTR>(textBox1->Text));
+		two = FindWindow("_EverQuestwndclass", mc.marshal_as<LPCSTR>(textBox1->Text));
+		three = FindWindow("_EverQuestwndclass", mc.marshal_as<LPCSTR>(textBox1->Text));
 		if (one != NULL)
 			SetWindowText(one, "EverQuest");
 		if (two != NULL)

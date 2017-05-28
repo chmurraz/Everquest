@@ -5,7 +5,7 @@ Character::Character()
 {
 	ip = new INPUT;
 	rest = 0;
-	typeSpeed = 15;
+	typeSpeed = 45;
 	lastLineRead = "";
 	name = "";
 	serverName = "";
@@ -93,6 +93,38 @@ HWND Character::getCharacterWindowHandle()
 	return CharacterWindowHandle;
 }
 
+void Character::setName(System::String ^ nameVal)
+{
+	name = nameVal;
+	if (serverName != "")
+	{
+		logFile = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
+		logFile += name + "_" + serverName + ".txt";
+		CharacterWindowHandle = FindWindow("_EverQuestwndclass", "EverQuest");
+		//SetWindowText(CharacterWindowHandle, name->);
+
+		//	Erase the old log files
+		File::Delete(logFile);
+	}
+
+}
+
+void Character::setServer(System::String ^ serverVal)
+{
+	serverName = serverVal;
+	if (name != "")
+	{
+		logFile = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_";
+		logFile += name + "_" + serverName + ".txt";
+		CharacterWindowHandle = FindWindow("_EverQuestwndclass", "EverQuest");
+		//SetWindowText(CharacterWindowHandle, name->);
+
+		//	Erase the old log files
+		File::Delete(logFile);
+	}
+}
+
+/*
 void Character::setAttributes(System::String ^ nameVal, System::String ^ serverVal)
 {
 	name = nameVal;
@@ -105,6 +137,7 @@ void Character::setAttributes(System::String ^ nameVal, System::String ^ serverV
 	//	Erase the old log files
 	File::Delete(logFile);
 }
+*/
 
 //	Launch actions based on the lastLineRead from the log file
 void Character::CharacterActions()

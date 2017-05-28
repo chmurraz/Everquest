@@ -94,6 +94,8 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 
 		//	Close the stream reader
 		sr->Close();
+		if (newLine->Contains("Consider whom")||("looks kind of risky"))
+			Actions(character1, newLine);
 		if (newLine->Contains("Khaed"))
 			Actions(character2, newLine);
 		if (newLine->Contains("Ravek"))
@@ -231,5 +233,31 @@ void Watcher::Actions(Character^ character, System::String^ newLine)
 			character->PressKeys("he group has been immolated", true);
 			character1->BringWindowToFront();
 		}
+	}
+	if (character->getName() == "Xuurak")
+	{
+		if (newLine->Contains("Consider whom"))
+		{
+			character->BringWindowToFront();
+			character->PressTab();
+			character->PressKeys("/consider", true);
+		}
+		if (newLine->Contains("looks kind of risky"))
+		{
+			int count = 0;
+			do
+			{
+				character->PressKeys("/cast 5", true);
+				count++;
+			} while (count < 6);
+			character->PressKeys("/sit", true);
+			Sleep(30000);
+		}
+
+		Sleep(2000);
+		character->PressESC();
+		character->PressKeys("/consider", true);
+		
+			
 	}
 }
