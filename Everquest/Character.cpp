@@ -11,11 +11,13 @@ Character::Character()
 	serverName = "";
 	logFile = "";
 	CharacterWindowHandle = NULL;
+	botData = gcnew Bot;
 }
 
 Character::~Character()
 {
 	delete ip;
+	delete botData;
 	ip = NULL;
 }
 
@@ -122,6 +124,11 @@ void Character::setServer(System::String ^ serverVal)
 		//	Erase the old log files
 		File::Delete(logFile);
 	}
+}
+
+Bot^ Character::getBotData()
+{
+	return botData;
 }
 
 /*
@@ -386,4 +393,149 @@ void Character::ReleaseShift()
 
 	ip->ki.dwFlags = KEYEVENTF_KEYUP;
 	SendInput(1, ip, sizeof(INPUT));
+}
+
+void Character::ProcessActions(System::String ^ newLine)
+{
+	/* WORK ON KHAED RAVEK STUFF BELOW*/
+	/*
+	if (character->getName() == "Khaed")
+	{
+	if (newLine->Contains("Assist me Khaed!"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/assist izzuum", true);
+	character1->BringWindowToFront();
+	}
+	if (newLine->Contains("Khaed, play your group buffs please"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/stopsong", true);
+	character->PressKeys("/melody 3 5 8 9 1 3 5 8 9 1 3 5 8 9 1 4", true);
+	character->PressKeys("/g ", false);
+	character->HoldShift();
+	character->PressKeys("i ", false);
+	character->ReleaseShift();
+	character->PressKeys("have started singing my buff songs", true);
+	//character->Press6();
+	character1->BringWindowToFront();
+	}
+	if (newLine->Contains("Khaed, stop singing"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/stopsong", true);
+	character->PressKeys("/g ", false);
+	character->HoldShift();
+	character->PressKeys("i ", false);
+	character->ReleaseShift();
+	character->PressKeys("have stopped singing", true);
+	character1->BringWindowToFront();
+	}
+	if (newLine->Contains("Khaed, mesmerize my target"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/stopsong", true);
+	character->PressKeys("/assist Izzuum", true);
+	character->PressKeys("/attackoff", true);
+	character->PressKeys("/melody 11", true);
+	character->PressKeys("/g ", false);
+	character->HoldShift();
+	character->PressKeys("i ", false);
+	character->ReleaseShift();
+	character->PressKeys("am mesmerizing it", true);
+	character1->BringWindowToFront();
+	}
+	if (newLine->Contains("Khaed, slow them down"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/stopsong", true);
+	character->PressKeys("/melody 2 1 3 8 9", true);
+	character->PressKeys("/g ", false);
+	character->HoldShift();
+	character->PressKeys("i ", false);
+	character->ReleaseShift();
+	character->PressKeys("am slowing them", true);
+	character1->BringWindowToFront();
+	}
+	if (newLine->Contains("Khaed, AoE mez and assist"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/stopsong", true);
+	character->PressKeys("/assist Izzuum", true);
+	character->PressKeys("/melody 10 2 12 8 3 5 12 8 3 5 12", true);
+	character->PressKeys("/g ", false);
+	character->HoldShift();
+	character->PressKeys("i ", false);
+	character->ReleaseShift();
+	character->PressKeys("am slowing them", true);
+	character1->BringWindowToFront();
+	}
+	}
+	if (character->getName() == "Ravek")
+	{
+	if (newLine->Contains("Assist me Ravek!"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/assist izzuum", true);
+	character->PressKeys("/pet attack", true);
+	character1->BringWindowToFront();
+	}
+	if (newLine->Contains("Ravek, flameskin please"))
+	{
+	character->BringWindowToFront();
+	character->PressKeys("/cast 11", true);
+	character->PressKeys("/g ", false);
+	character->HoldShift();
+	character->PressKeys("t", false);
+	character->ReleaseShift();
+	character->PressKeys("he group has been immolated", true);
+	character1->BringWindowToFront();
+	}
+	}
+	*/
+	if (name == "Xuurak")
+	{
+		//	Find valid target
+		//	Attempt to nuke
+		//	If out of range
+		//	If can't see
+		//	If damaged, keep in combat
+		//	Check for exp gain
+		//	Remove valid target
+		//	Remove from combat
+		//	Sit
+		if (newLine->Contains("Consider whom"))
+		{
+			BringWindowToFront();
+			PressTab();
+			PressKeys("/consider", true);
+		}
+		if (newLine->Contains("looks kind of risky"))
+		{
+			botData->setValidTarget(true);
+			//PressKeys("/say valid", true);
+			do
+			{
+				PressKeys("/cast 5", true);
+				Sleep(4000);
+			} while (!botData->getGotExp());
+		}
+		if (newLine->Contains("Talking to yourself"))
+		{
+			PressESC();
+			PressKeys("/consider", true);
+		}
+		if (newLine->Contains("You gain experience"))
+		{
+			botData->setGotExp(true);
+			botData->setValidTarget(false);
+			PressEnter();
+			PressEnter();
+			PressESC();
+			PressKeys("/sit", true);
+			getBotData()->setValidTarget(false);
+			Sleep(30000);
+			PressKeys("/tell xuurak asdf", true);
+		}
+	}
 }

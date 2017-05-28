@@ -24,6 +24,7 @@ private:
 	Button^ button2;
 	Button^ button3;
 	Button^ button4;
+	Button^ button5;
 
 	TextBox^ textBox1;
 	TextBox^ textBox2;

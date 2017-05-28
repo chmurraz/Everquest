@@ -73,6 +73,7 @@ void EverquestForm::BuildGUIObjects()
 	button2 = gcnew Button();
 	button3 = gcnew Button();
 	button4 = gcnew Button();
+	button5 = gcnew Button();
 	textBox1 = gcnew TextBox();
 	textBox2 = gcnew TextBox();
 	textBox3 = gcnew TextBox();
@@ -92,6 +93,7 @@ void EverquestForm::BuildGUIObjects()
 	ButtonBuilder(button2, 10, 40, 1, "Show/Hide Console Window", "");
 	ButtonBuilder(button3, 10, 70, 2, "Find EQ Character Window", "");
 	ButtonBuilder(button4, 10, 100, 3, "Reset EQ Windows", "");
+	ButtonBuilder(button5, 10, 130, 3, "AutoBot this character", "LightGreen");
 
 	LabelBuilder(label1, 200, 10, 9, "Character One ----->:");
 	LabelBuilder(label2, 200, 40, 10, "Character Two ----->:");

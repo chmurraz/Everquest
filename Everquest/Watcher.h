@@ -30,7 +30,6 @@ private:
 	static StreamReader^ sr3;
 
 	static void ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr);
-	static void Actions(Character^ character, System::String^ newLine);
 
 	//	Automatic botting variables
 	bool validTarget;

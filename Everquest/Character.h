@@ -7,6 +7,8 @@
 #include <string>
 #using <System.dll>
 #using <System.Windows.Forms.dll>
+#include "Bot.h"
+
 using namespace System;
 using namespace System::IO;
 using namespace System::Windows::Forms;
@@ -24,6 +26,7 @@ private:
 	System::String^ serverName;
 	System::String^ logFile;
 	HWND CharacterWindowHandle;
+	Bot ^botData;
 	
 public:
 	Character();
@@ -47,6 +50,7 @@ public:
 	void Press8();
 	void Press9();
 	void Press0();
+	void ProcessActions(System::String ^ newLine);
 
 	//	Windows functions
 	void BringWindowToFront();
@@ -64,6 +68,7 @@ public:
 	HWND getCharacterWindowHandle();
 	void setName(System::String^ name);
 	void setServer(System::String^ server);
+	Bot^ getBotData();
 	//void setAttributes(System::String^ name, System::String^ server);
 	
 	//[DllImport("user32.dll", CharSet = CharSet::Auto)]
