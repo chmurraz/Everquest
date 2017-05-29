@@ -38,3 +38,10 @@ void Bot::setGotExp(bool input)
 {
 	gotExp = input;
 }
+
+void Bot::falseAllBools()
+{
+	validTarget = false;
+	gotExp = false;
+	inRange = false;
+}

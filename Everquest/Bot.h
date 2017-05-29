@@ -14,5 +14,6 @@ public:
 	void setValidTarget(bool input);
 	void setInRange(bool input);
 	void setGotExp(bool input);
+	void falseAllBools();
 };
 

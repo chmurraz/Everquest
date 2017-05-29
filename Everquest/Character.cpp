@@ -506,36 +506,37 @@ void Character::ProcessActions(System::String ^ newLine)
 		//	Sit
 		if (newLine->Contains("Consider whom"))
 		{
-			BringWindowToFront();
 			PressTab();
 			PressKeys("/consider", true);
 		}
 		if (newLine->Contains("looks kind of risky"))
-		{
 			botData->setValidTarget(true);
-			//PressKeys("/say valid", true);
-			do
-			{
-				PressKeys("/cast 5", true);
-				Sleep(4000);
-			} while (!botData->getGotExp());
-		}
+		if (newLine->Contains("You cannot see your target"))
+			botData->setValidTarget(false);
 		if (newLine->Contains("Talking to yourself"))
 		{
 			PressESC();
 			PressKeys("/consider", true);
 		}
 		if (newLine->Contains("You gain experience"))
-		{
 			botData->setGotExp(true);
-			botData->setValidTarget(false);
-			PressEnter();
-			PressEnter();
-			PressESC();
+		if (newLine->Contains("out of range"))
+			botData->setInRange(false);
+		if (newLine->Contains("You begin casting") && botData->getValidTarget())
+			botData->setInRange(true);
+		if ((newLine->Contains("Xuurak hit") && newLine->Contains("of non-melee damage")) || newLine->Contains("resist"))
+		{
+			int count = 0;
+			do
+			{
+				PressKeys("/cast 5", true);
+				Sleep(4000);
+				count++;
+			} while (count < 7);
 			PressKeys("/sit", true);
-			getBotData()->setValidTarget(false);
-			Sleep(30000);
-			PressKeys("/tell xuurak asdf", true);
+			botData->falseAllBools();
 		}
+		if (getBotData()->getValidTarget() && getBotData()->getInRange())
+			PressKeys("/cast 5", true);
 	}
 }

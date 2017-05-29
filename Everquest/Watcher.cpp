@@ -98,19 +98,8 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 			character2->ProcessActions(newLine);
 		if (newLine->Contains("Ravek"))
 			character3->ProcessActions(newLine);
-
-		//	Section for auto-botting
-		if (character1->getBotData()->getValidTarget())
-		{
-			// Try to nuke
-		}
-		//	Search for targets
 		else
-		{
 			character1->ProcessActions(newLine);
-		}
-
-
 	}
 	catch (Exception^ ioex)
 	{
