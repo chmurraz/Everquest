@@ -15,7 +15,7 @@ using namespace System::Windows::Forms;
 using namespace System::Security::Permissions;
 using namespace System::Runtime::InteropServices;
 
-ref class Character
+ref class Character : public Subject
 {
 private:
 	INPUT* ip;
