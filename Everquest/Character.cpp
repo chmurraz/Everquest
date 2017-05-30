@@ -146,10 +146,11 @@ void Character::setAttributes(System::String ^ nameVal, System::String ^ serverV
 }
 */
 
-//	Launch actions based on the lastLineRead from the log file
-void Character::CharacterActions()
+//	Launch commands based on the lastLineRead from the log file
+void Character::CharacterCommands()
 {
 	Console::WriteLine(lastLineRead);
+	Notify(botData);
 }
 
 void Character::PressESC()
@@ -395,7 +396,7 @@ void Character::ReleaseShift()
 	SendInput(1, ip, sizeof(INPUT));
 }
 
-void Character::ProcessActions(System::String ^ newLine)
+void Character::ProcessCommands(System::String ^ newLine)
 {
 	/* WORK ON KHAED RAVEK STUFF BELOW*/
 	/*

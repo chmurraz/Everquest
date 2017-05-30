@@ -150,21 +150,23 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actions.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="Bot.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="EverquestForm.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Watcher.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actions.cpp" />
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="Bot.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="EverquestForm.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -46,6 +46,10 @@ private:
 	Character^ character2;
 	Character^ character3;
 
+	Command^ command1;
+	Command^ command2;
+	Command^ command3;
+
 	Watcher^ watcher;
 
 	void GUI_Click(Object^ sender, EventArgs^ e);

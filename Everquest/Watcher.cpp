@@ -76,7 +76,7 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 			{
 				foundLastLineReadInLog = true;
 				character->setLastLineRead(newLine);
-				character->CharacterActions();
+				character->CharacterCommands();
 			}
 
 			//	If it is non empty, then compare the currently read line in the log to the last line read by the character
@@ -87,7 +87,7 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 				if (foundLastLineReadInLog && (newLine != character->getLastLineRead()))
 				{
 					character->setLastLineRead(newLine);
-					character->CharacterActions();
+					character->CharacterCommands();
 				}
 			}
 		}
@@ -95,11 +95,11 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 		//	Close the stream reader
 		sr->Close();
 		if (newLine->Contains("Khaed"))
-			character2->ProcessActions(newLine);
+			character2->ProcessCommands(newLine);
 		if (newLine->Contains("Ravek"))
-			character3->ProcessActions(newLine);
+			character3->ProcessCommands(newLine);
 		else
-			character1->ProcessActions(newLine);
+			character1->ProcessCommands(newLine);
 	}
 	catch (Exception^ ioex)
 	{

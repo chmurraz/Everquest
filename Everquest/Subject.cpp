@@ -2,24 +2,19 @@
 #include "Subject.h"
 #include <algorithm>
 
-using namespace std;
-
-void Subject::Attach(Shop *shop)
+void Subject::Attach(Command^ command)
 {
-	list.push_back(shop);
+	//list.push_back(shop);
+	list->Add(command);
 }
-void Subject::Detach(Shop *shop)
+void Subject::Detach(Command^ command)
 {
-	list.erase(std::remove(list.begin(), list.end(), shop), list.end());
+	//list.erase(std::remove(list.begin(), list.end(), shop), list.end());
+	list->Remove(command);
 }
 
-void ASubject::Notify(float price)
+void Subject::Notify(Bot^ botData)
 {
-	for (vector<Shop*>::const_iterator iter = list.begin(); iter != list.end(); ++iter)
-	{
-		if (*iter != 0)
-		{
-			(*iter)->Update(price);
-		}
-	}
+	//list->ForEach(character->CharacterCommands);
+	list->ForEach()
 }

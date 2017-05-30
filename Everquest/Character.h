@@ -8,6 +8,8 @@
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 #include "Bot.h"
+#include "Subject.h"
+#include "Command.h"
 
 using namespace System;
 using namespace System::IO;
@@ -50,13 +52,13 @@ public:
 	void Press8();
 	void Press9();
 	void Press0();
-	void ProcessActions(System::String ^ newLine);
+	void ProcessCommands(System::String ^ newLine);
 
 	//	Windows functions
 	void BringWindowToFront();
 
 	//	Logic function
-	void CharacterActions();
+	void CharacterCommands();
 
 	//	Mutators and Accessors
 	System::String^ getLastLine();
