@@ -1,6 +1,7 @@
 #pragma once
+
 ref class Observer
 {
 public:
-	virtual void Update();
+	virtual void Update() = 0;
 };

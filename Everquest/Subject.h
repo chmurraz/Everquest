@@ -14,6 +14,6 @@ private:
 public:
 	void Attach(Command ^command);
 	void Detach(Command ^command);
-	void Notify(Bot ^botData);
+	void Notify(Command ^command);
 };
 

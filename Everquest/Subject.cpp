@@ -13,8 +13,8 @@ void Subject::Detach(Command^ command)
 	list->Remove(command);
 }
 
-void Subject::Notify(Bot^ botData)
+void Subject::Notify(Command^ command)
 {
 	//list->ForEach(character->CharacterCommands);
-	list->ForEach()
+	list->ForEach(command->Update);
 }

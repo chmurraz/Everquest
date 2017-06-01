@@ -9,7 +9,7 @@ Command::Command()
 	gotExp = false;
 }
 
-void Command::Update(Bot ^botData)
+void Command::Update()
 {
 	validTarget = botData->getValidTarget();
 	inRange = botData->getInRange();

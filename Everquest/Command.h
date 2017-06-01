@@ -7,8 +7,10 @@ private:
 	bool validTarget;
 	bool inRange;
 	bool gotExp;
+	Bot ^botData;
 public:
 	Command();
-	void Update(Bot ^botData);
+	//void Update() override;
+	void Update() override;
 };
 

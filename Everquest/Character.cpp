@@ -150,7 +150,7 @@ void Character::setAttributes(System::String ^ nameVal, System::String ^ serverV
 void Character::CharacterCommands()
 {
 	Console::WriteLine(lastLineRead);
-	Notify(botData);
+	// DELETE THIS LINE?? Notify(botData);
 }
 
 void Character::PressESC()
