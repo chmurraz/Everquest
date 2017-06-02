@@ -56,6 +56,7 @@ public:
 
 	//	Keyboard Sim
 	void PressKeys(System::String^ keys, System::Boolean enterBool);
+	void PressKeyTest(UINT key);
 	void HoldShift();
 	void ReleaseShift();
 	void PressESC();

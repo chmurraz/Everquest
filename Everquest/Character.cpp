@@ -60,6 +60,21 @@ void Character::PressKeys(System::String^ keys, System::Boolean enterBool)
 	Sleep(rest);
 }
 
+void Character::PressKeyTest(UINT key)
+{
+	ip->type = INPUT_KEYBOARD;
+	ip->ki.dwExtraInfo = GetMessageExtraInfo();
+	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(key, MAPVK_VK_TO_VSC));
+	ip->ki.time = 0;
+
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+	ip->ki.dwFlags = 0;	//	0 for keypress
+	SendInput(1, ip, sizeof(INPUT));
+	ip->ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, ip, sizeof(INPUT));
+}
+
 System::String ^ Character::getLastLine()
 {
 	/*
@@ -172,213 +187,73 @@ void Character::DelegateMethod(int number)
 
 void Character::PressESC()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_ESCAPE, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_ESCAPE);
 }
 
 void Character::PressEnter()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_RETURN, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_RETURN);
 	Sleep(100);
 }
 
 void Character::PressTab()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_TAB, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_TAB);
 }
 
 void Character::PressF1()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_F1, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_F1);
 }
 
 void Character::Press1()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD1, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD1);
 }
 
 void Character::Press2()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD2, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD2);
 }
 
 void Character::Press3()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD3, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD3);
 }
 
 void Character::Press4()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD4, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD4);
 }
 
 void Character::Press5()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD5, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD5);
 }
 
 void Character::Press6()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(0x36, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD6);
 }
 
 void Character::Press7()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD7, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD7);
 }
 
 void Character::Press8()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD8, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD8);
 }
 
 void Character::Press9()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD9, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD9);
 }
 
 void Character::Press0()
 {
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_NUMPAD0, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
+	PressKeyTest(VK_NUMPAD0);
 }
 
 void Character::BringWindowToFront()
