@@ -12,13 +12,25 @@ Character::Character()
 	logFile = "";
 	CharacterWindowHandle = NULL;
 	botData = gcnew Bot;
+	command = gcnew Command;
 }
 
 Character::~Character()
 {
 	delete ip;
-	delete botData;
 	ip = NULL;
+}
+
+void Character::eventRaised()
+{
+	//	Hook the handler to the event
+	E += gcnew BotDataChanged(command, &Command::Handler);
+
+	//	Call the event
+	fire(botData->getValidTarget(), botData->getInRange(), botData->getGotExp());
+
+	//	Unhook the handler from the event
+	E -= gcnew BotDataChanged(command, &Command::Handler);
 }
 
 void Character::PressKeys(System::String^ keys, System::Boolean enterBool)
@@ -523,6 +535,7 @@ void Character::ProcessCommands(System::String ^ newLine)
 		{
 			PressESC();
 			PressKeys("/consider", true);
+			botData->setValidTarget(false);
 		}
 		if (newLine->Contains("You gain experience"))
 			botData->setGotExp(true);
@@ -545,4 +558,5 @@ void Character::ProcessCommands(System::String ^ newLine)
 		if (getBotData()->getValidTarget() && getBotData()->getInRange())
 			PressKeys("/cast 5", true);
 	}
+	eventRaised();
 }

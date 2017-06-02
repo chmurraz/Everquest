@@ -4,9 +4,7 @@
 
 Command::Command()
 {
-	validTarget = false;
-	inRange = false;
-	gotExp = false;
+
 }
 
 void Command::Delegate1(int number)
@@ -19,7 +17,7 @@ void Command::Delegate2(int number)
 	//	Do other stuff
 }
 
-void Command::Handler(int i, float f)
+void Command::Handler(bool validTarget, bool inRange, bool gotExp)
 {
 	System::Console::WriteLine("EventTriggered");
 }

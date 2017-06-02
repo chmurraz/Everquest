@@ -15,6 +15,10 @@ https://msdn.microsoft.com/en-us/library/ee850490(v=vs.110).aspx?cs-save-lang=1&
 
 Experiment with eliminating the observer and subject classes. Use C++/CLI classes instead
 
+TODO....
+Clean up all hte useless "commands" out there
+Move all typing stuff into a class/object and let the Command class access it
+
 ========================================================================
     CONSOLE APPLICATION : Class Diagram
 ========================================================================

@@ -17,10 +17,18 @@ using namespace System::Windows::Forms;
 using namespace System::Security::Permissions;
 using namespace System::Runtime::InteropServices;
 
+public delegate void BotDataChanged(bool, bool, bool);
 
+//	interface that has an event and a function to invoke the event
+interface struct I
+{
+public:
+	event BotDataChanged ^E;
+	void fire(bool, bool, bool);
+};
 
 //ref class Character : public Subject
-ref class Character
+ref class Character: public I
 {
 private:
 	INPUT* ip;
@@ -32,10 +40,19 @@ private:
 	System::String^ logFile;
 	HWND CharacterWindowHandle;
 	Bot ^botData;
+	Command ^command;
 	
 public:
 	Character();
 	~Character();
+
+	//	Events
+	virtual event BotDataChanged ^E;
+	virtual void fire(bool a, bool b, bool c)
+	{
+		E(a, b, c);
+	}
+	void eventRaised();
 
 	//	Keyboard Sim
 	void PressKeys(System::String^ keys, System::Boolean enterBool);
