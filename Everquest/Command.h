@@ -1,7 +1,11 @@
 #pragma once
-#include "Observer.h"
+//#include "Observer.h"
 #include "Bot.h"
-ref class Command : Observer
+
+public delegate void MyDelegate(int number);
+
+//ref class Command : Observer
+ref class Command
 {
 private:
 	bool validTarget;
@@ -11,6 +15,8 @@ private:
 public:
 	Command();
 	//void Update() override;
-	void Update() override;
+	void Delegate1(int number);
+	void Delegate2(int number);
+	void Handler(int i, float f);
 };
 

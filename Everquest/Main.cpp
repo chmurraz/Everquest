@@ -11,4 +11,44 @@ int main()
 	//	Run the GUI
 	EverquestForm::Launch();
 
+	//	Testing Event/Delegates
+	
+	/*		FROM PDF
+	Command ^test = gcnew Command;
+	MyDelegate ^delegate_test = gcnew MyDelegate(test, &Command::Delegate1);
+
+	if (delegate_test)
+		delegate_test(12345);
+
+	delegate_test += gcnew MyDelegate(test, &Command::Delegate2);
+	delegate_test -= gcnew MyDelegate(test, &Command::Delegate1);
+
+	Character ^testChar = gcnew Character;
+	test->
+
+	*/
+
+	/*
+	/////	From MSDN
+	//https://msdn.microsoft.com/en-us/library/58cwt3zh.aspx
+
+	//	Declare a new character (event source)
+	Character ^character = gcnew Character();
+	
+	//	Declare a new command (event listener)
+	Command^ command = gcnew Command();
+
+	//	Hook the handler to the event
+	character->getBotData()->E += gcnew BotDataChanged(command, &Command::Handler);
+
+	//	Call the event
+	character->getBotData()->fire(1, 3.14);
+
+	//	Unhook the handler from the event
+	character->getBotData()->E -= gcnew BotDataChanged(command, &Command::Handler);
+	*/
+
+
+
+
 }

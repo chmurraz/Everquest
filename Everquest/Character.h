@@ -8,7 +8,7 @@
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 #include "Bot.h"
-#include "Subject.h"
+//#include "Subject.h"
 #include "Command.h"
 
 using namespace System;
@@ -17,7 +17,10 @@ using namespace System::Windows::Forms;
 using namespace System::Security::Permissions;
 using namespace System::Runtime::InteropServices;
 
-ref class Character : public Subject
+
+
+//ref class Character : public Subject
+ref class Character
 {
 private:
 	INPUT* ip;
@@ -33,7 +36,7 @@ private:
 public:
 	Character();
 	~Character();
-	
+
 	//	Keyboard Sim
 	void PressKeys(System::String^ keys, System::Boolean enterBool);
 	void HoldShift();
@@ -59,6 +62,9 @@ public:
 
 	//	Logic function
 	void CharacterCommands();
+
+	//	Delegate functions
+	void DelegateMethod(int number);
 
 	//	Mutators and Accessors
 	System::String^ getLastLine();

@@ -153,6 +153,11 @@ void Character::CharacterCommands()
 	// DELETE THIS LINE?? Notify(botData);
 }
 
+void Character::DelegateMethod(int number)
+{
+	throw gcnew System::NotImplementedException();
+}
+
 void Character::PressESC()
 {
 	ip->type = INPUT_KEYBOARD;
