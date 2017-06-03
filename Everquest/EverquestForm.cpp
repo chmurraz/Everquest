@@ -176,19 +176,7 @@ void EverquestForm::GUI_Click(Object ^ sender, EventArgs ^ e)
 			//character2->setAttributes(textBox2->Text, textBox4->Text);
 			//character3->setAttributes(textBox3->Text, textBox4->Text);
 
-			//	Add filters to the filewatchers
-			//watcher->getFileWatcher1()->Filter = character1->getLogFile();
-			//watcher->getFileWatcher2()->Filter = character2->getLogFile();
-			//watcher->getFileWatcher3()->Filter = character3->getLogFile();
-
-			watcher->getFileWatcher1()->Filter = "eqlog_" + character1->getName() + "_" + character1->getServerName() + ".txt";
-			//watcher->getFileWatcher2()->Filter = "eqlog_" + character2->getName() + "_" + character2->getServerName() + ".txt";
-			//watcher->getFileWatcher3()->Filter = "eqlog_" + character3->getName() + "_" + character3->getServerName() + ".txt";
-
-			//	Char and watcher is a wrapper class that holds the char, the watcher and any buttons it GUI objects
-			//	Used to create a thread delegate object
-
-			//ThreadStart^ threadDelegate = gcnew ThreadStart(charAndWatcher, &CharAndWatcher::RoutineLaunch);
+			//	Add filters to the filewatchers Watcher::RoutineLaunch);
 			//Thread^ routineThread = gcnew Thread(threadDelegate);
 			//routineThread->Start();
 		}

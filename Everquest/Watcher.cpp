@@ -2,12 +2,13 @@
 #include "Watcher.h"
 #include "EverquestForm.h"
 
-
 Watcher::Watcher(Character^ char1, Character^ char2, Character^ char3)
 {
 	fileWatcher1 = gcnew FileSystemWatcher;
 	//fileWatcher2 = gcnew FileSystemWatcher;
 	//fileWatcher3 = gcnew FileSystemWatcher;
+
+	//lineQ = gcnew System::Collections::Queue;
 
 	character1 = char1;
 	character2 = char2;
@@ -76,6 +77,8 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 			{
 				foundLastLineReadInLog = true;
 				character->setLastLineRead(newLine);
+
+				//	CharacterCommands is deprecated.  Clean this up/remove
 				character->CharacterCommands();
 			}
 
@@ -94,12 +97,19 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 
 		//	Close the stream reader
 		sr->Close();
-		if (newLine->Contains("Khaed"))
-			character2->ProcessCommands(newLine);
-		if (newLine->Contains("Ravek"))
-			character3->ProcessCommands(newLine);
-		else
-			character1->ProcessCommands(newLine);
+		//lineQ->Enqueue(newLine);
+		//System::Collections::IEnumerator ^myEnum = lineQ->GetEnumerator();
+		//while (myEnum->MoveNext())
+		//{
+			if (newLine->Contains("Khaed"))
+				character2->ProcessCommands(newLine);
+			if (newLine->Contains("Ravek"))
+				character3->ProcessCommands(newLine);
+			else
+				character1->ProcessCommands(newLine);
+			Console::WriteLine(System::String::Concat("PROCESSED -------->: ", newLine));
+		//}
+
 	}
 	catch (Exception^ ioex)
 	{

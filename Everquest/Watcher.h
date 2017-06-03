@@ -21,6 +21,9 @@ private:
 	static FileSystemWatcher^ fileWatcher2;
 	static FileSystemWatcher^ fileWatcher3;
 
+	//	Pretty sure a queue isn't needed
+	//static System::Collections::Queue ^lineQ;
+
 	static Character^ character1;
 	static Character^ character2;
 	static Character^ character3;

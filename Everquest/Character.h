@@ -16,24 +16,39 @@ using namespace System::IO;
 using namespace System::Windows::Forms;
 using namespace System::Security::Permissions;
 using namespace System::Runtime::InteropServices;
+using namespace System::Collections::Generic;
 
-public delegate void BotDataChanged(bool, bool, bool);
+//	CHANGE THE NAME OF THIS DELEGATE.  EVENTS ARE RAISED BASED ON STRING MATCHES NOW, NOT BOTDATA
+public delegate void BotDataChanged(System::String^, bool, bool, bool);
 
 //	interface that has an event and a function to invoke the event
 interface struct I
 {
 public:
 	event BotDataChanged ^E;
-	void fire(bool, bool, bool);
+	void fire(System::String^, bool, bool, bool);
+};
+
+ref class EventBlob
+{
+private:
+	System::String^ eventText;
+	bool additionalLogic;
+	System::String^ botDataType;
+	bool botDataValue;
+public:
+	EventBlob(System::String^, bool, System::String^, bool);
+	System::String^ getEventText();
+	bool getLogic();
+	System::String^ getBotDataType();
+	bool getBotDataValue();
 };
 
 //ref class Character : public Subject
 ref class Character: public I
 {
 private:
-	INPUT* ip;
-	DWORD rest;
-	DWORD typeSpeed;
+
 	System::String^ lastLineRead;
 	System::String^ name;
 	System::String^ serverName;
@@ -41,45 +56,26 @@ private:
 	HWND CharacterWindowHandle;
 	Bot ^botData;
 	Command ^command;
+	List<EventBlob^>^ eventList;
 	
 public:
 	Character();
-	~Character();
 
 	//	Events
 	virtual event BotDataChanged ^E;
-	virtual void fire(bool a, bool b, bool c)
+	virtual void fire(System::String^ t,bool a, bool b, bool c)
 	{
-		E(a, b, c);
+		E(t, a, b, c);
 	}
-	void eventRaised();
-
-	//	Keyboard Sim
-	void PressKeys(System::String^ keys, System::Boolean enterBool);
-	void PressKeyTest(UINT key);
-	void HoldShift();
-	void ReleaseShift();
-	void PressESC();
-	void PressEnter();
-	void PressTab();
-	void PressF1();
-	void Press1();
-	void Press2();
-	void Press3();
-	void Press4();
-	void Press5();
-	void Press6();
-	void Press7();
-	void Press8();
-	void Press9();
-	void Press0();
-	void ProcessCommands(System::String ^ newLine);
+	void eventRaised(System::String^ t);
+	void EventBuilder();
 
 	//	Windows functions
 	void BringWindowToFront();
 
 	//	Logic function
 	void CharacterCommands();
+	void ProcessCommands(System::String ^ newLine);
 
 	//	Delegate functions
 	void DelegateMethod(int number);

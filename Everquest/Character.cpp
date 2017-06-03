@@ -3,9 +3,7 @@
 
 Character::Character()
 {
-	ip = new INPUT;
-	rest = 0;
-	typeSpeed = 45;
+
 	lastLineRead = "";
 	name = "";
 	serverName = "";
@@ -13,67 +11,47 @@ Character::Character()
 	CharacterWindowHandle = NULL;
 	botData = gcnew Bot;
 	command = gcnew Command;
+	eventList = gcnew List<EventBlob^>();
+
+	//	Build events list
+	EventBuilder();
 }
 
-Character::~Character()
+void Character::EventBuilder()
 {
-	delete ip;
-	ip = NULL;
+	EventBlob ^considerWhom = gcnew EventBlob("Consider whom", true,"", false);
+	EventBlob ^looksRisky = gcnew EventBlob("looks kind of risky", true, "validTarget", true);
+	EventBlob ^tombstone = gcnew EventBlob("what would you like your tombstone to say", true, "validTarget", false);
+	EventBlob ^cantSee = gcnew EventBlob("You cannot see your target", true, "validTarget", false);
+	EventBlob ^talkingSelf = gcnew EventBlob("Talking to yourself", true, "", false);
+	EventBlob ^gotExp = gcnew EventBlob("You gain experience", true, "gotExp", true);
+	EventBlob ^outRange = gcnew EventBlob("out of range", true, "validTarget", false);
+	EventBlob ^inRange = gcnew EventBlob("You begin casting", botData->getValidTarget(), "inRange", true);
+	EventBlob ^spellHit = gcnew EventBlob("of non-melee damage", true, "", false);
+
+	eventList->Add(considerWhom);
+	eventList->Add(looksRisky);
+	eventList->Add(cantSee);
+	eventList->Add(talkingSelf);
+	eventList->Add(gotExp);
+	eventList->Add(outRange);
+	eventList->Add(inRange);
+	eventList->Add(spellHit);
 }
 
-void Character::eventRaised()
+void Character::eventRaised(System::String^ eventText)
 {
 	//	Hook the handler to the event
 	E += gcnew BotDataChanged(command, &Command::Handler);
 
 	//	Call the event
-	fire(botData->getValidTarget(), botData->getInRange(), botData->getGotExp());
+	fire(eventText, botData->getValidTarget(), botData->getInRange(), botData->getGotExp());
 
 	//	Unhook the handler from the event
 	E -= gcnew BotDataChanged(command, &Command::Handler);
 }
 
-void Character::PressKeys(System::String^ keys, System::Boolean enterBool)
-{
-	for (unsigned i = 0; i < keys->Length; i++)
-	{
-		ip->type = INPUT_KEYBOARD;
-		ip->ki.dwExtraInfo = GetMessageExtraInfo();
 
-		//	would use char ch = keys->at(i); for a C++ std:string
-		char ch = keys[i];
-
-		ip->ki.wScan = static_cast<WORD>(MapVirtualKeyEx(VkKeyScanA(ch), MAPVK_VK_TO_VSC, GetKeyboardLayout(0)));
-		ip->ki.time = 0;
-
-		//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-		ip->ki.dwFlags = 0;	//	0 for keypress
-		SendInput(1, ip, sizeof(INPUT));
-		ip->ki.dwFlags = KEYEVENTF_KEYUP;
-		SendInput(1, ip, sizeof(INPUT));
-		// Use this sleep line to debug each character one at a time in EQ
-		Sleep(typeSpeed);
-	}
-	if (enterBool)
-		PressEnter();
-	Sleep(rest);
-}
-
-void Character::PressKeyTest(UINT key)
-{
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(key, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
-}
 
 System::String ^ Character::getLastLine()
 {
@@ -177,83 +155,12 @@ void Character::setAttributes(System::String ^ nameVal, System::String ^ serverV
 void Character::CharacterCommands()
 {
 	Console::WriteLine(lastLineRead);
-	// DELETE THIS LINE?? Notify(botData);
+	// DELETE THIS LINE?? Old deprecated crap?? Notify(botData);
 }
 
 void Character::DelegateMethod(int number)
 {
 	throw gcnew System::NotImplementedException();
-}
-
-void Character::PressESC()
-{
-	PressKeyTest(VK_ESCAPE);
-}
-
-void Character::PressEnter()
-{
-	PressKeyTest(VK_RETURN);
-	Sleep(100);
-}
-
-void Character::PressTab()
-{
-	PressKeyTest(VK_TAB);
-}
-
-void Character::PressF1()
-{
-	PressKeyTest(VK_F1);
-}
-
-void Character::Press1()
-{
-	PressKeyTest(VK_NUMPAD1);
-}
-
-void Character::Press2()
-{
-	PressKeyTest(VK_NUMPAD2);
-}
-
-void Character::Press3()
-{
-	PressKeyTest(VK_NUMPAD3);
-}
-
-void Character::Press4()
-{
-	PressKeyTest(VK_NUMPAD4);
-}
-
-void Character::Press5()
-{
-	PressKeyTest(VK_NUMPAD5);
-}
-
-void Character::Press6()
-{
-	PressKeyTest(VK_NUMPAD6);
-}
-
-void Character::Press7()
-{
-	PressKeyTest(VK_NUMPAD7);
-}
-
-void Character::Press8()
-{
-	PressKeyTest(VK_NUMPAD8);
-}
-
-void Character::Press9()
-{
-	PressKeyTest(VK_NUMPAD9);
-}
-
-void Character::Press0()
-{
-	PressKeyTest(VK_NUMPAD0);
 }
 
 void Character::BringWindowToFront()
@@ -262,31 +169,7 @@ void Character::BringWindowToFront()
 	Sleep(150);
 }
 
-void Character::HoldShift()
-{
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_SHIFT, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
 
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = 0;	//	0 for keypress
-	SendInput(1, ip, sizeof(INPUT));
-}
-
-void Character::ReleaseShift()
-{
-	ip->type = INPUT_KEYBOARD;
-	ip->ki.dwExtraInfo = GetMessageExtraInfo();
-	ip->ki.wScan = static_cast<WORD>(MapVirtualKey(VK_SHIFT, MAPVK_VK_TO_VSC));
-	ip->ki.time = 0;
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
-	ip->ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, ip, sizeof(INPUT));
-}
 
 void Character::ProcessCommands(System::String ^ newLine)
 {
@@ -397,41 +280,44 @@ void Character::ProcessCommands(System::String ^ newLine)
 		//	Remove valid target
 		//	Remove from combat
 		//	Sit
-		if (newLine->Contains("Consider whom"))
+		for each(EventBlob^ eventBlob in eventList)
 		{
-			PressTab();
-			PressKeys("/consider", true);
+			if (newLine->Contains(eventBlob->getEventText()) && eventBlob->getLogic())
+				eventRaised(eventBlob->getEventText());
+			if (eventBlob->getBotDataType() == "validTarget")
+				botData->setValidTarget(eventBlob->getBotDataValue());
+			if (eventBlob->getBotDataType() == "inRange")
+				botData->setInRange(eventBlob->getBotDataValue());
+			if (eventBlob->getBotDataType() == "gotExp")
+				botData->setGotExp(eventBlob->getBotDataValue());
 		}
-		if (newLine->Contains("looks kind of risky"))
-			botData->setValidTarget(true);
-		if (newLine->Contains("You cannot see your target"))
-			botData->setValidTarget(false);
-		if (newLine->Contains("Talking to yourself"))
-		{
-			PressESC();
-			PressKeys("/consider", true);
-			botData->setValidTarget(false);
-		}
-		if (newLine->Contains("You gain experience"))
-			botData->setGotExp(true);
-		if (newLine->Contains("out of range"))
-			botData->setInRange(false);
-		if (newLine->Contains("You begin casting") && botData->getValidTarget())
-			botData->setInRange(true);
-		if ((newLine->Contains("Xuurak hit") && newLine->Contains("of non-melee damage")) || newLine->Contains("resist"))
-		{
-			int count = 0;
-			do
-			{
-				PressKeys("/cast 5", true);
-				Sleep(4000);
-				count++;
-			} while (count < 7);
-			PressKeys("/sit", true);
-			botData->falseAllBools();
-		}
-		if (getBotData()->getValidTarget() && getBotData()->getInRange())
-			PressKeys("/cast 5", true);
 	}
-	eventRaised();
+}
+
+EventBlob::EventBlob(System::String ^eventtext, bool logic, System::String ^botType, bool botValue)
+{
+	eventText = eventtext;
+	additionalLogic = logic;
+	botDataType = botType;
+	botDataValue = botValue;
+}
+
+System::String ^ EventBlob::getEventText()
+{
+	return eventText;
+}
+
+bool EventBlob::getLogic()
+{
+	return additionalLogic;
+}
+
+System::String ^ EventBlob::getBotDataType()
+{
+	return botDataType;
+}
+
+bool EventBlob::getBotDataValue()
+{
+	return botDataValue;
 }
