@@ -2,6 +2,7 @@
 #include "Watcher.h"
 #include "EverquestForm.h"
 
+
 Watcher::Watcher(Character^ char1, Character^ char2, Character^ char3)
 {
 	fileWatcher1 = gcnew FileSystemWatcher;
@@ -13,6 +14,8 @@ Watcher::Watcher(Character^ char1, Character^ char2, Character^ char3)
 	character1 = char1;
 	character2 = char2;
 	character3 = char3;
+
+	q = gcnew CommandQueue<String^>();
 
 	//	Set the path
 	fileWatcher1->Path = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs";
@@ -61,9 +64,10 @@ FileSystemWatcher ^ Watcher::getFileWatcher1()
 //	return fileWatcher3;
 //}
 
-void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr)
+void Watcher::ScanLines(Character^ character)
 {
 	System::String^ newLine;
+	StreamReader^ sr;
 	try
 	{
 		sr = File::OpenText(character->getLogFile());
@@ -78,8 +82,8 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 				foundLastLineReadInLog = true;
 				character->setLastLineRead(newLine);
 
-				//	CharacterCommands is deprecated.  Clean this up/remove
-				character->CharacterCommands();
+				//	PrintNewLine is deprecated.  Clean this up/remove
+				character->PrintNewLine();
 			}
 
 			//	If it is non empty, then compare the currently read line in the log to the last line read by the character
@@ -90,26 +94,15 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 				if (foundLastLineReadInLog && (newLine != character->getLastLineRead()))
 				{
 					character->setLastLineRead(newLine);
-					character->CharacterCommands();
+					character->PrintNewLine();
+					character->ProcessCommands(newLine);
+					Console::WriteLine(System::String::Concat("PROCESSED -------->: ", newLine));
 				}
 			}
 		}
 
 		//	Close the stream reader
 		sr->Close();
-		//lineQ->Enqueue(newLine);
-		//System::Collections::IEnumerator ^myEnum = lineQ->GetEnumerator();
-		//while (myEnum->MoveNext())
-		//{
-			if (newLine->Contains("Khaed"))
-				character2->ProcessCommands(newLine);
-			if (newLine->Contains("Ravek"))
-				character3->ProcessCommands(newLine);
-			else
-				character1->ProcessCommands(newLine);
-			Console::WriteLine(System::String::Concat("PROCESSED -------->: ", newLine));
-		//}
-
 	}
 	catch (Exception^ ioex)
 	{
@@ -124,11 +117,11 @@ void Watcher::ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, St
 
 void Watcher::OnChange1(Object^ source, FileSystemEventArgs^ e)
 {
-	FileSystemWatcher^ filewatcher = fileWatcher1;
+	//FileSystemWatcher^ filewatcher = fileWatcher1;
 	Character^ character = character1;
-	StreamReader^ sr = sr1;
 
-	ScanLines(filewatcher, character, sr);
+	FIX THIS PART AND ADD THE COMMAND QUEUE SOMEHOW
+	ScanLines(character);
 }
 
 //void Watcher::OnChange2(Object ^ source, FileSystemEventArgs ^ e)

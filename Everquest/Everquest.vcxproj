@@ -153,6 +153,7 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="Bot.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="EverquestForm.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="stdafx.h" />

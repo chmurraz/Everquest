@@ -3,6 +3,7 @@
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 #include "Character.h"
+#include "CommandQueue.h"
 using namespace System;
 using namespace System::IO;
 using namespace System::Security::Permissions;
@@ -21,6 +22,8 @@ private:
 	static FileSystemWatcher^ fileWatcher2;
 	static FileSystemWatcher^ fileWatcher3;
 
+	static CommandQueue<String^>^ q;
+
 	//	Pretty sure a queue isn't needed
 	//static System::Collections::Queue ^lineQ;
 
@@ -32,7 +35,8 @@ private:
 	static StreamReader^ sr2;
 	static StreamReader^ sr3;
 
-	static void ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr);
+	//static void ScanLines(FileSystemWatcher^ fileWatcher, Character^ character, StreamReader^ sr);
+	static void ScanLines(Character^ character);
 
 	//	Automatic botting variables
 	bool validTarget;

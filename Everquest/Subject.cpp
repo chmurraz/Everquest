@@ -15,6 +15,6 @@ void Subject::Detach(Command^ command)
 
 void Subject::Notify(Command^ command)
 {
-	//list->ForEach(character->CharacterCommands);
+	//list->ForEach(character->PrintNewLine);
 	//list->ForEach(command->Update);
 }

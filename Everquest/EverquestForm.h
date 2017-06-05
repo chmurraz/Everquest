@@ -4,6 +4,7 @@
 #include "Character.h"
 //#include "LogWatcher.h"
 #include "Watcher.h"
+#include "CommandQueue.h"
 //#using <System.Drawing.dll>
 //#using <System.Windows.Forms.dll>
 //#using <System.dll>
@@ -46,9 +47,9 @@ private:
 	Character^ character2;
 	Character^ character3;
 
-	Command^ command1;
-	Command^ command2;
-	Command^ command3;
+	//Command^ command1;
+	//Command^ command2;
+	//Command^ command3;
 
 	Watcher^ watcher;
 

@@ -152,7 +152,7 @@ void Character::setAttributes(System::String ^ nameVal, System::String ^ serverV
 */
 
 //	Launch commands based on the lastLineRead from the log file
-void Character::CharacterCommands()
+void Character::PrintNewLine()
 {
 	Console::WriteLine(lastLineRead);
 	// DELETE THIS LINE?? Old deprecated crap?? Notify(botData);

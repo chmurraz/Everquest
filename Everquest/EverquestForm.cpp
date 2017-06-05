@@ -126,9 +126,9 @@ void EverquestForm::BuildPrivate()
 	character2 = gcnew Character();
 	character3 = gcnew Character();
 
-	command1 = gcnew Command();
-	command2 = gcnew Command();
-	command3 = gcnew Command();
+	//command1 = gcnew Command();
+	//command2 = gcnew Command();
+	//command3 = gcnew Command();
 
 	watcher = gcnew Watcher(character1, character2, character3);
 	characterServerList = File::OpenText("C:\\Users\\Chris\\Documents\\Visual Studio 2015\\Projects\\Everquest\\Debug\\characterServerList.txt");

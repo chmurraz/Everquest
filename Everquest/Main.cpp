@@ -11,7 +11,7 @@ int main()
 	//	Run the GUI
 	EverquestForm::Launch();
 
-	//	Testing Event/Delegates
+	//	Testing Event/Delegates/Queues
 	
 	/*		FROM PDF
 	Command ^test = gcnew Command;
@@ -48,7 +48,7 @@ int main()
 	character->getBotData()->E -= gcnew BotDataChanged(command, &Command::Handler);
 	*/
 
-
+	//CommandQueue<String^>^ test = gcnew CommandQueue<String^>();
 
 
 }

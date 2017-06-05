@@ -74,7 +74,7 @@ public:
 	void BringWindowToFront();
 
 	//	Logic function
-	void CharacterCommands();
+	void PrintNewLine();
 	void ProcessCommands(System::String ^ newLine);
 
 	//	Delegate functions
