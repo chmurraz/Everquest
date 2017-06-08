@@ -76,7 +76,7 @@ void Watcher::ScanLines(Character^ character)
 		{
 			newLine = sr->ReadLine();
 
-			//	Check if last line read by character object is empty
+			//	Check if last line read by character is empty
 			if (character->getLastLineRead() == "")
 			{
 				foundLastLineReadInLog = true;
@@ -86,7 +86,7 @@ void Watcher::ScanLines(Character^ character)
 				character->PrintNewLine();
 			}
 
-			//	If it is non empty, then compare the currently read line in the log to the last line read by the character
+			//	If it is non empty, then compare the currently read line to the last line read by the character
 			else
 			{
 				if (newLine == character->getLastLineRead())
@@ -95,14 +95,24 @@ void Watcher::ScanLines(Character^ character)
 				{
 					character->setLastLineRead(newLine);
 					character->PrintNewLine();
-					character->ProcessCommands(newLine);
-					Console::WriteLine(System::String::Concat("PROCESSED -------->: ", newLine));
+					
+					//	Add this line to the CommandQueue 'q'
+					q->TryEnqueue(newLine,10);
+
 				}
 			}
 		}
 
 		//	Close the stream reader
 		sr->Close();
+
+		//	Process the Queue
+		while (q->Count()>0)
+		{
+			newLine = q->Dequeue();
+			character->ProcessCommands(newLine);
+			Console::WriteLine(System::String::Concat("PROCESSED -------->: ", newLine));
+		}
 	}
 	catch (Exception^ ioex)
 	{
@@ -119,8 +129,6 @@ void Watcher::OnChange1(Object^ source, FileSystemEventArgs^ e)
 {
 	//FileSystemWatcher^ filewatcher = fileWatcher1;
 	Character^ character = character1;
-
-	FIX THIS PART AND ADD THE COMMAND QUEUE SOMEHOW
 	ScanLines(character);
 }
 

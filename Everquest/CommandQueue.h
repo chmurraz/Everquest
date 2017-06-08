@@ -1,6 +1,8 @@
 #pragma once
 #using <System.dll>
 
+//https://msdn.microsoft.com/en-us/library/de0542zz(v=vs.110).aspx?cs-save-lang=1&cs-lang=cpp#code-snippet-2
+
 using namespace System;
 using namespace System::Threading;
 using namespace System::Collections::Generic;
@@ -135,6 +137,17 @@ public:
 		}
 
 		return removedCt;
+	};
+
+	/**********************************
+	*
+	*	I added this function
+	*
+	*************************************/
+	// Return a count of elements in the queue
+	int Count()
+	{
+		return m_inputQueue->Count;
 	};
 
 	// Print all queue elements.
