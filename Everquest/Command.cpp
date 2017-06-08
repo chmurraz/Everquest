@@ -38,6 +38,11 @@ void Command::Handler(System::String^ eventText, bool validTarget, bool inRange,
 		PressTab();
 		PressKeys("/consider", true);
 	}
+	if (eventText == "practice skills")
+	{
+		FIZ THIS PART TOMORROW
+		PressKeys("/mem skills", true);
+	}
 }
 
 void Command::PressKeys(System::String^ keys, System::Boolean enterBool)

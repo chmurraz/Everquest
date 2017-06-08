@@ -28,15 +28,18 @@ void Character::EventBuilder()
 	EventBlob ^outRange = gcnew EventBlob("out of range", true, "validTarget", false);
 	EventBlob ^inRange = gcnew EventBlob("You begin casting", botData->getValidTarget(), "inRange", true);
 	EventBlob ^spellHit = gcnew EventBlob("of non-melee damage", true, "", false);
+	EventBlob ^spellPractice = gcnew EventBlob("practice skills", true, "", false);
 
 	eventList->Add(considerWhom);
 	eventList->Add(looksRisky);
 	eventList->Add(cantSee);
+	eventList->Add(tombstone);
 	eventList->Add(talkingSelf);
 	eventList->Add(gotExp);
 	eventList->Add(outRange);
 	eventList->Add(inRange);
 	eventList->Add(spellHit);
+	eventList->Add(spellPractice);
 }
 
 void Character::eventRaised(System::String^ eventText)
