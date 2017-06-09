@@ -29,6 +29,9 @@ void Character::EventBuilder()
 	EventBlob ^inRange = gcnew EventBlob("You begin casting", botData->getValidTarget(), "inRange", true);
 	EventBlob ^spellHit = gcnew EventBlob("of non-melee damage", true, "", false);
 	EventBlob ^spellPractice = gcnew EventBlob("practice skills", true, "", false);
+	EventBlob ^insuff = gcnew EventBlob("Insufficient Mana to cast this spell", true, "lowMana", true);
+	EventBlob ^beginCasting = gcnew EventBlob("You begin casting", true, "lowMana", false);
+	EventBlob ^swim = gcnew EventBlob("Go swim", true, "", true);
 
 	eventList->Add(considerWhom);
 	eventList->Add(looksRisky);
@@ -40,6 +43,9 @@ void Character::EventBuilder()
 	eventList->Add(inRange);
 	eventList->Add(spellHit);
 	eventList->Add(spellPractice);
+	eventList->Add(insuff);
+	eventList->Add(beginCasting);
+	eventList->Add(swim);
 }
 
 void Character::eventRaised(System::String^ eventText)
@@ -48,10 +54,10 @@ void Character::eventRaised(System::String^ eventText)
 	E += gcnew BotDataChanged(command, &Command::Handler);
 
 	//	Call the event
-	fire(eventText, botData->getValidTarget(), botData->getInRange(), botData->getGotExp());
+	fire(eventText, botData);
 
 	//	Unhook the handler from the event
-	E -= gcnew BotDataChanged(command, &Command::Handler);
+ 	E -= gcnew BotDataChanged(command, &Command::Handler);
 }
 
 
@@ -116,7 +122,6 @@ void Character::setName(System::String ^ nameVal)
 		//	Erase the old log files
 		File::Delete(logFile);
 	}
-
 }
 
 void Character::setServer(System::String ^ serverVal)
@@ -293,6 +298,8 @@ void Character::ProcessCommands(System::String ^ newLine)
 				botData->setInRange(eventBlob->getBotDataValue());
 			if (eventBlob->getBotDataType() == "gotExp")
 				botData->setGotExp(eventBlob->getBotDataValue());
+			if (eventBlob->getBotDataType() == "lowMana")
+				botData->setLowMana(eventBlob->getBotDataValue());
 		}
 	}
 }

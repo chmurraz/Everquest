@@ -24,6 +24,11 @@ bool Bot::getGotExp()
 	return gotExp;
 }
 
+bool Bot::getLowMana()
+{
+	return lowMana;
+}
+
 void Bot::setValidTarget(bool input)
 {
 	validTarget = input;
@@ -39,9 +44,15 @@ void Bot::setGotExp(bool input)
 	gotExp = input;
 }
 
+void Bot::setLowMana(bool input)
+{
+	lowMana = input;
+}
+
 void Bot::falseAllBools()
 {
 	validTarget = false;
 	gotExp = false;
 	inRange = false;
+	lowMana = false;
 }

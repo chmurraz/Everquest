@@ -19,14 +19,14 @@ using namespace System::Runtime::InteropServices;
 using namespace System::Collections::Generic;
 
 //	CHANGE THE NAME OF THIS DELEGATE.  EVENTS ARE RAISED BASED ON STRING MATCHES NOW, NOT BOTDATA
-public delegate void BotDataChanged(System::String^, bool, bool, bool);
+public delegate void BotDataChanged(System::String^, Bot^, System::String^);
 
 //	interface that has an event and a function to invoke the event
 interface struct I
 {
 public:
 	event BotDataChanged ^E;
-	void fire(System::String^, bool, bool, bool);
+	void fire(System::String^, Bot^);
 };
 
 ref class EventBlob
@@ -63,9 +63,9 @@ public:
 
 	//	Events
 	virtual event BotDataChanged ^E;
-	virtual void fire(System::String^ t,bool a, bool b, bool c)
+	virtual void fire(System::String^ t, Bot^ botData)
 	{
-		E(t, a, b, c);
+		E(t, botData, logFile);
 	}
 	void eventRaised(System::String^ t);
 	void EventBuilder();
