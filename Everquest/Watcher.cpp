@@ -116,6 +116,7 @@ void Watcher::ScanLines(Character^ character)
 	}
 	catch (Exception^ ioex)
 	{
+		//	TODO: Delete me... I'm a dummy test comment
 		throw gcnew Exception("\nAn error occured when opening the log file.  It is likely you have an incorrect character or server name.  The first letter of a character names must be capitalized.  Server names are NOT capitalized (all letters are lower case).", ioex);
 	}
 }
